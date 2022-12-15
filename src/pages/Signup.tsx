@@ -1,13 +1,44 @@
-import React from "react";
+import React, { FormEvent, useState } from "react";
 import styled from "styled-components";
 import logoSVG from "../assets/logo.svg";
 import { MdEmail } from "react-icons/md";
 import { IoMdLock } from "react-icons/io";
 import { ImFacebook2, ImGoogle, ImTwitter, ImGithub } from "react-icons/im";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { paths } from "../App";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase/index";
 
 function Signup() {
+	const [enteredEmail, setEnteredEmail] = useState("");
+	const [enteredPassword, setEnteredPassword] = useState("");
+	const [errorMessage, setErrorMessage] = useState<string>();
+	const [errorMessageIsShown, setErrorMessageIsShown] = useState(false);
+
+	const navigate = useNavigate();
+
+	async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+		if (enteredPassword.length < 6) {
+			setErrorMessage("Password should be at least 6 characters");
+			setErrorMessageIsShown(true);
+			return;
+		}
+
+		try {
+			e.preventDefault();
+			await createUserWithEmailAndPassword(auth, enteredEmail, enteredPassword);
+			navigate(paths.ITEMS, { replace: true });
+		} catch (err: any) {
+			if (err?.message === "Firebase: Error (auth/email-already-in-use).") {
+				setErrorMessage("Email Already exists");
+				setErrorMessageIsShown(true);
+			} else {
+				setErrorMessage("An unexpected error occured");
+				setErrorMessageIsShown(true);
+			}
+		}
+	}
+
 	return (
 		<Container>
 			<div>
@@ -18,21 +49,38 @@ function Signup() {
 					<div>Shoppingify</div>
 				</Logo>
 				<SignupText>Signup</SignupText>
-				<Form>
+				<Form onSubmit={handleSubmit}>
 					<div>
 						<p>
 							<MdEmail />
 						</p>
-						<input type="email" name="email" id="email" placeholder="Email" />
+						<input
+							type="email"
+							name="email"
+							id="email"
+							placeholder="Email"
+							value={enteredEmail}
+							onChange={(e) => setEnteredEmail(e.target.value)}
+							required
+						/>
 					</div>
 					<div>
 						<p>
 							<IoMdLock />
 						</p>
-						<input type="password" name="password" id="password" placeholder="Password" />
+						<input
+							type="password"
+							name="password"
+							id="password"
+							placeholder="Password"
+							value={enteredPassword}
+							onChange={(e) => setEnteredPassword(e.target.value)}
+							required
+						/>
 					</div>
 					<button type="submit">Sign up</button>
 				</Form>
+				{errorMessageIsShown && <ErrorMessage>{errorMessage}</ErrorMessage>}
 				<Others>
 					<div>or register with these social profiles</div>
 					<Socials>
@@ -59,6 +107,12 @@ function Signup() {
 }
 
 export default Signup;
+
+const ErrorMessage = styled.div`
+	font-size: 1.4rem;
+	color: #ff414e;
+	margin-top: 1rem;
+`;
 
 const LinkStyles = styled(Link)`
 	color: #f9a109;
@@ -94,7 +148,7 @@ const Others = styled.div`
 	font-size: 1.4rem;
 `;
 
-const Form = styled.div`
+const Form = styled.form`
 	margin-top: 2.5rem;
 	display: flex;
 	flex-direction: column;
