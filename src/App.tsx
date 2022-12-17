@@ -1,8 +1,10 @@
-import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
+import { Navigate, Route, Routes } from "react-router-dom";
 import RequireAuth from "./components/auth/RequireAuth";
+import Items from "./pages/auth/dashboard/Items";
+import History from "./pages/auth/dashboard/History";
+import Statistics from "./pages/auth/dashboard/Statistics";
+import Login from "./pages/auth/Login";
+import Signup from "./pages/auth/Signup";
 
 export enum paths {
 	SIGNUP = "/signup",
@@ -19,7 +21,9 @@ function App() {
 			<Route path={paths.SIGNUP} element={<Signup />} />
 			<Route path={paths.LOGIN} element={<Login />} />
 			<Route element={<RequireAuth />}>
-				<Route path={paths.ITEMS} element={<p>items</p>} />
+				<Route path={paths.ITEMS} element={<Items />} />
+				<Route path={paths.HISTORY} element={<History />} />
+				<Route path={paths.STATISTICS} element={<Statistics />} />
 			</Route>
 		</Routes>
 	);

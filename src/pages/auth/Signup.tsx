@@ -1,9 +1,9 @@
 import React, { FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { paths } from "../App";
+import { paths } from "../../App";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase/index";
-import Layout from "../components/auth/Layout";
+import { auth } from "../../firebase/index";
+import Layout from "../../components/auth/Layout";
 
 function Signup() {
 	const [enteredEmail, setEnteredEmail] = useState("");

@@ -5,6 +5,8 @@ import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "../../firebase/index";
 import { useAppDispatch } from "../../store/hooks";
 import { authActions } from "../../store/authSlice";
+import styled from "styled-components";
+import SideBar from "../SideBar";
 
 function RequireAuth() {
 	const user = useAppSelector((state) => state.uid);
@@ -23,7 +25,21 @@ function RequireAuth() {
 		});
 	}, []);
 
-	return user ? <Outlet /> : <Navigate to="/login" state={{ from: location }} replace />;
+	return (
+		<>
+			{user && (
+				<Container>
+					<SideBar />
+					<Outlet />
+				</Container>
+			)}
+			{!user && <Navigate to="/login" state={{ from: location }} replace />}
+		</>
+	);
 }
 
 export default RequireAuth;
+
+const Container = styled.div`
+	display: flex;
+`;

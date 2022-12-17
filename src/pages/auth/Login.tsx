@@ -1,9 +1,9 @@
-import React, { FormEvent, MouseEvent, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { paths } from "../App";
 import { signInAnonymously, signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase";
-import Layout from "../components/auth/Layout";
+import { FormEvent, MouseEvent, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { paths } from "../../App";
+import Layout from "../../components/auth/Layout";
+import { auth } from "../../firebase";
 
 function Login() {
 	const [enteredEmail, setEnteredEmail] = useState("");
