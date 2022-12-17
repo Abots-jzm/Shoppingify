@@ -1,23 +1,24 @@
-import React, { ChangeEvent, FormEvent, ReactNode } from "react";
+import React, { ChangeEvent, FormEvent, MouseEvent } from "react";
 import styled, { keyframes } from "styled-components";
 import logoSVG from "../../assets/logo.svg";
 import { MdEmail } from "react-icons/md";
 import { IoMdLock } from "react-icons/io";
-import { ImFacebook2, ImGoogle, ImTwitter, ImGithub } from "react-icons/im";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { paths } from "../../App";
 
 type Props = {
 	enteredEmail: string;
 	enteredPassword: string;
 	errorMessage: string;
 	errorMessageIsShown: boolean;
+	guestErrorMessage?: string;
+	guestErrorMessageIsShown?: boolean;
 	isLoading: boolean;
-	text: string;
-	otherAccountsText: string;
+	guestIsLoading?: boolean;
 	handleSubmit: (e: FormEvent<HTMLFormElement>) => void;
 	onEmailChange: (e: ChangeEvent<HTMLInputElement>) => void;
 	onPasswordChange: (e: ChangeEvent<HTMLInputElement>) => void;
-	children: ReactNode;
+	onGuestSubmit?: (e: MouseEvent<HTMLButtonElement>) => void;
 };
 
 function Layout({
@@ -25,14 +26,18 @@ function Layout({
 	enteredPassword,
 	errorMessage,
 	errorMessageIsShown,
+	guestErrorMessage,
+	guestErrorMessageIsShown,
 	isLoading,
-	text,
-	otherAccountsText,
+	guestIsLoading,
 	handleSubmit,
 	onEmailChange,
 	onPasswordChange,
-	children,
+	onGuestSubmit,
 }: Props) {
+	const location = useLocation();
+	const isLoginPage = location.pathname === paths.LOGIN;
+
 	return (
 		<Container>
 			<div>
@@ -42,7 +47,7 @@ function Layout({
 					</div>
 					<div>Shoppingify</div>
 				</Logo>
-				<SignupText>{text}</SignupText>
+				<SignupText>{isLoginPage ? "Login" : "Sign up"}</SignupText>
 				<Form onSubmit={handleSubmit}>
 					<div>
 						<p>
@@ -72,29 +77,35 @@ function Layout({
 							required
 						/>
 					</div>
-					<button type="submit">
-						<span>{text}</span>
+					<LoginBtn type="submit">
+						<div>{isLoginPage ? "Login" : "Sign up"}</div>
 						{isLoading && <Spinner />}
-					</button>
+					</LoginBtn>
 				</Form>
 				{errorMessageIsShown && <ErrorMessage>{errorMessage}</ErrorMessage>}
 				<Others>
-					<div>or {otherAccountsText} with these social profiles</div>
-					<Socials>
-						<button>
-							<ImGoogle />
-						</button>
-						<button>
-							<ImFacebook2 />
-						</button>
-						<button>
-							<ImTwitter />
-						</button>
-						<button>
-							<ImGithub />
-						</button>
-					</Socials>
-					<div>{children}</div>
+					{isLoginPage && (
+						<>
+							<div>or</div>
+							<GuestBtn onClick={onGuestSubmit}>
+								<span>continue as a guest</span>
+								{guestIsLoading && <SpinnerGray />}
+							</GuestBtn>
+							{guestErrorMessageIsShown && <ErrorMessage>{guestErrorMessage}</ErrorMessage>}
+						</>
+					)}
+					<div style={{ marginTop: isLoginPage ? "3.3rem" : "0" }}>
+						{isLoginPage && (
+							<>
+								Don't have an account yet? <LinkStyles to={paths.SIGNUP}>Register</LinkStyles>
+							</>
+						)}
+						{!isLoginPage && (
+							<>
+								Already have an account? <LinkStyles to={paths.LOGIN}>Login</LinkStyles>
+							</>
+						)}
+					</div>
 				</Others>
 			</div>
 		</Container>
@@ -117,39 +128,23 @@ const Spinner = styled.div`
 	animation: ${spinner} 0.7s linear infinite;
 `;
 
+const SpinnerGray = styled(Spinner)`
+	border-left: 1px solid #828282;
+`;
+
 const ErrorMessage = styled.div`
 	font-size: 1.4rem;
 	color: #ff414e;
 	margin-top: 1rem;
 `;
 
-export const LinkStyles = styled(Link)`
+const LinkStyles = styled(Link)`
 	color: #f9a109;
 	text-decoration: none;
 `;
 
-const Socials = styled.div`
-	margin: 2.2rem 0 3.3rem;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	gap: 2rem;
-
-	button {
-		display: grid;
-		place-items: center;
-		width: 4.2rem;
-		height: 4.2rem;
-		border-radius: 50%;
-		border: 1px solid #828282;
-		color: #828282;
-		background-color: white;
-		font-size: 1.6rem;
-	}
-`;
-
 const Others = styled.div`
-	margin-top: 3.2rem;
+	margin-top: 1.8rem;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -157,23 +152,32 @@ const Others = styled.div`
 	font-size: 1.4rem;
 `;
 
+const LoginBtn = styled.button`
+	padding: 0.8rem;
+	background-color: #f9a109;
+	color: white;
+	border-radius: 8px;
+	font-weight: 700;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 2rem;
+`;
+
+const GuestBtn = styled(LoginBtn)`
+	margin-top: 1.8rem;
+	border: 1px solid #828282;
+	color: #828282;
+	background-color: white;
+	width: 100%;
+	font-weight: 400;
+`;
+
 const Form = styled.form`
 	margin-top: 2.5rem;
 	display: flex;
 	flex-direction: column;
 	gap: 1.8rem;
-
-	button {
-		padding: 0.8rem;
-		background-color: #f9a109;
-		color: white;
-		border-radius: 8px;
-		font-weight: 700;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		gap: 2rem;
-	}
 
 	& > div {
 		position: relative;

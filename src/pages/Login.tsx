@@ -1,9 +1,9 @@
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, MouseEvent, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { paths } from "../App";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInAnonymously, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
-import Layout, { LinkStyles } from "../components/auth/Layout";
+import Layout from "../components/auth/Layout";
 
 function Login() {
 	const [enteredEmail, setEnteredEmail] = useState("");
@@ -11,6 +11,9 @@ function Login() {
 	const [errorMessage, setErrorMessage] = useState("");
 	const [errorMessageIsShown, setErrorMessageIsShown] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
+	const [guestIsLoading, setGuestIsLoading] = useState(false);
+	const [guestErrorMessage, setGuestErrorMessage] = useState("");
+	const [guestErrorMessageIsShown, setGuestErrorMessageIsShown] = useState(false);
 
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -36,21 +39,34 @@ function Login() {
 		}
 	}
 
+	async function onGuestSubmit(e: MouseEvent<HTMLButtonElement>) {
+		try {
+			setGuestIsLoading(true);
+			await signInAnonymously(auth);
+			setIsLoading(false);
+			navigate(nextPath, { replace: true });
+		} catch (err: any) {
+			setIsLoading(false);
+			setErrorMessage("An unexpected error occured");
+			setErrorMessageIsShown(true);
+		}
+	}
+
 	return (
 		<Layout
 			enteredEmail={enteredEmail}
 			enteredPassword={enteredPassword}
 			errorMessage={errorMessage}
 			errorMessageIsShown={errorMessageIsShown}
+			guestErrorMessage={guestErrorMessage}
+			guestErrorMessageIsShown={guestErrorMessageIsShown}
 			isLoading={isLoading}
-			text="Login"
-			otherAccountsText="continue"
+			guestIsLoading={guestIsLoading}
 			handleSubmit={handleSubmit}
 			onEmailChange={(e) => setEnteredEmail(e.target.value)}
 			onPasswordChange={(e) => setEnteredPassword(e.target.value)}
-		>
-			Don't have an account yet? <LinkStyles to={paths.SIGNUP}>Register</LinkStyles>
-		</Layout>
+			onGuestSubmit={onGuestSubmit}
+		/>
 	);
 }
 

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { paths } from "../App";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase/index";
-import Layout, { LinkStyles } from "../components/auth/Layout";
+import Layout from "../components/auth/Layout";
 
 function Signup() {
 	const [enteredEmail, setEnteredEmail] = useState("");
@@ -46,14 +46,10 @@ function Signup() {
 			errorMessage={errorMessage}
 			errorMessageIsShown={errorMessageIsShown}
 			isLoading={isLoading}
-			text="Signup"
-			otherAccountsText="register"
 			handleSubmit={handleSubmit}
 			onEmailChange={(e) => setEnteredEmail(e.target.value)}
 			onPasswordChange={(e) => setEnteredPassword(e.target.value)}
-		>
-			Already have an account? <LinkStyles to={paths.LOGIN}>Login</LinkStyles>
-		</Layout>
+		/>
 	);
 }
 
