@@ -1,8 +1,8 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import RequireAuth from "./components/auth/RequireAuth";
-import Items from "./pages/auth/dashboard/Items";
-import History from "./pages/auth/dashboard/History";
-import Statistics from "./pages/auth/dashboard/Statistics";
+import Items from "./pages/dashboard/Items";
+import History from "./pages/dashboard/History";
+import Statistics from "./pages/dashboard/Statistics";
 import Login from "./pages/auth/Login";
 import Signup from "./pages/auth/Signup";
 

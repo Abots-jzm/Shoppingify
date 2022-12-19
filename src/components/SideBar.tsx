@@ -77,17 +77,28 @@ const Tabs = styled.div`
 		height: 4.6rem;
 		display: flex;
 		align-items: center;
-		gap: 1.5rem;
+		gap: 2.7rem;
 		cursor: pointer;
+
+		@media only screen and (max-width: 600px) {
+			gap: 1.5rem;
+		}
 	}
 `;
 
 const Container = styled.div`
-	flex-basis: 6.2rem;
+	flex-basis: 9.3rem;
 	height: 100vh;
+	position: sticky;
+	top: 0;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
 	align-items: center;
-	padding: 2rem 0;
+	padding: 3.4rem 0;
+
+	@media only screen and (max-width: 600px) {
+		flex-basis: 6.2rem;
+		padding: 2rem 0;
+	}
 `;
