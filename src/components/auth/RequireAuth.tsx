@@ -1,13 +1,12 @@
-import React, { useEffect } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import { useEffect } from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
-import { useAppSelector } from "../../store/hooks";
-import { onAuthStateChanged, User } from "firebase/auth";
-import { auth } from "../../firebase/index";
-import { useAppDispatch } from "../../store/hooks";
-import { authActions } from "../../store/authSlice";
 import styled from "styled-components";
-import SideBar from "../SideBar";
+import { auth } from "../../api/firebase/index";
+import { authActions } from "../../store/authSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import ShoppingCart from "../ShoppingCart";
+import SideBar from "../SideBar";
 
 function RequireAuth() {
 	const user = useAppSelector((state) => state.auth.uid);

@@ -1,16 +1,16 @@
-import React, { FormEvent, useState } from "react";
+import { FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { paths } from "../../App";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../firebase/index";
 import Layout from "../../components/auth/Layout";
+import useSignup from "../../hooks/auth/useSignup";
 
 function Signup() {
 	const [enteredEmail, setEnteredEmail] = useState("");
 	const [enteredPassword, setEnteredPassword] = useState("");
+
 	const [errorMessage, setErrorMessage] = useState("");
 	const [errorMessageIsShown, setErrorMessageIsShown] = useState(false);
-	const [isLoading, setIsLoading] = useState(false);
+	const { mutate: signup, isLoading } = useSignup();
 
 	const navigate = useNavigate();
 
@@ -21,22 +21,27 @@ function Signup() {
 			return;
 		}
 
-		try {
-			e.preventDefault();
-			setIsLoading(true);
-			await createUserWithEmailAndPassword(auth, enteredEmail, enteredPassword);
-			setIsLoading(false);
-			navigate(paths.ITEMS, { replace: true });
-		} catch (err: any) {
-			setIsLoading(false);
-			if (err?.message === "Firebase: Error (auth/email-already-in-use).") {
-				setErrorMessage("Email Already exists");
-				setErrorMessageIsShown(true);
-			} else {
-				setErrorMessage("An unexpected error occured");
-				setErrorMessageIsShown(true);
+		e.preventDefault();
+		signup(
+			{
+				email: enteredEmail,
+				password: enteredPassword,
+			},
+			{
+				onSuccess() {
+					navigate(paths.ITEMS, { replace: true });
+				},
+				onError(err: any) {
+					if (err?.message === "Firebase: Error (auth/email-already-in-use).") {
+						setErrorMessage("Email Already exists");
+						setErrorMessageIsShown(true);
+					} else {
+						setErrorMessage("An unexpected error occured");
+						setErrorMessageIsShown(true);
+					}
+				},
 			}
-		}
+		);
 	}
 
 	return (
