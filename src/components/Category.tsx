@@ -19,10 +19,14 @@ export default Category;
 
 const Grid = styled.div`
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(18.2rem, 1fr));
+	grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
 	row-gap: 2.7rem;
 	column-gap: 1.9rem;
 	align-items: flex-start;
+
+	@media only screen and (max-width: 600px) {
+		grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+	}
 `;
 
 const Title = styled.div`

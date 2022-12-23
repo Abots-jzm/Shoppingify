@@ -7,9 +7,10 @@ import { useAppDispatch } from "../../store/hooks";
 import { authActions } from "../../store/authSlice";
 import styled from "styled-components";
 import SideBar from "../SideBar";
+import ShoppingCart from "../ShoppingCart";
 
 function RequireAuth() {
-	const user = useAppSelector((state) => state.uid);
+	const user = useAppSelector((state) => state.auth.uid);
 	const location = useLocation();
 	const dispatch = useAppDispatch();
 
@@ -31,6 +32,7 @@ function RequireAuth() {
 				<Container>
 					<SideBar />
 					<Outlet />
+					<ShoppingCart />
 				</Container>
 			)}
 			{!user && <Navigate to="/login" state={{ from: location }} replace />}

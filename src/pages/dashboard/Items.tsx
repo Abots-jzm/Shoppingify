@@ -1,4 +1,4 @@
-import React, { Children } from "react";
+import React from "react";
 import styled from "styled-components";
 import Category from "../../components/Category";
 import Item from "../../components/Item";
@@ -9,7 +9,25 @@ function Items() {
 			<HeaderText>
 				<span>Shoppingify</span> allows you to take your shopping list wherever you go
 			</HeaderText>
-			<ContentContainer></ContentContainer>
+			<ContentContainer>
+				<Category title="testing">
+					<Item>ayooo</Item>
+					<Item>ayooo</Item>
+					<Item>ayooo</Item>
+					<Item>ayooo</Item>
+					<Item>ayooo</Item>
+					<Item>ayooo</Item>
+					<Item>ayooo</Item>
+					<Item>ayooo</Item>
+					<Item>ayooo</Item>
+					<Item>ayooo</Item>
+					<Item>ayooo</Item>
+				</Category>
+				<Category title="ayo">
+					<Item>aoadlj</Item>
+					<Item>aoadlj</Item>
+				</Category>
+			</ContentContainer>
 		</Container>
 	);
 }
@@ -32,6 +50,10 @@ const HeaderText = styled.div`
 	span {
 		color: #f9a109;
 		font-weight: 700;
+	}
+
+	@media only screen and (max-width: 600px) {
+		display: none;
 	}
 `;
 

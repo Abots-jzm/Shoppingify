@@ -1,4 +1,4 @@
-import React from "react";
+import React, { MouseEvent } from "react";
 import styled from "styled-components";
 import logoSVG from "../assets/logo.svg";
 import { FiList } from "react-icons/fi";
@@ -8,10 +8,21 @@ import { HiOutlineShoppingCart } from "react-icons/hi";
 import { motion } from "framer-motion";
 import { useLocation, useNavigate } from "react-router-dom";
 import { paths } from "../App";
+import useScreenSize from "../hooks/useScreenSize";
+import { useAppDispatch } from "../store/hooks";
+import { cartActions } from "../store/cartSlice";
 
 function SideBar() {
 	const location = useLocation();
 	const navigate = useNavigate();
+	const { screenWidth } = useScreenSize();
+	const dispatch = useAppDispatch();
+
+	function handleCartBtnClick() {
+		if (screenWidth > 900) return;
+
+		dispatch(cartActions.toggleCart());
+	}
 
 	return (
 		<Container>
@@ -32,7 +43,7 @@ function SideBar() {
 					<BiBarChartSquare />
 				</div>
 			</Tabs>
-			<CartBtn>
+			<CartBtn onClick={handleCartBtnClick}>
 				<HiOutlineShoppingCart />
 			</CartBtn>
 		</Container>
@@ -61,6 +72,7 @@ const CartBtn = styled.div`
 	height: 4.2rem;
 	border-radius: 50%;
 	font-size: 2.2rem;
+	cursor: pointer;
 `;
 
 const Tabs = styled.div`
@@ -91,6 +103,8 @@ const Container = styled.div`
 	height: 100vh;
 	position: sticky;
 	top: 0;
+	z-index: 2;
+	background-color: white;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
