@@ -1,25 +1,66 @@
 import React from "react";
+import { AnimatePresence, motion, Variants } from "framer-motion";
 import styled from "styled-components";
+import useScreenSize from "../hooks/useScreenSize";
 import { useAppSelector } from "../store/hooks";
+
+const ContainerVariants: Variants = {
+	hidden: {
+		opacity: 0,
+	},
+	visible: {
+		opacity: 1,
+		transition: {
+			duration: 0.1,
+			when: "beforeChildren",
+		},
+	},
+	exit: {
+		opacity: 0,
+		transition: {
+			duration: 0.1,
+			when: "afterChildren",
+		},
+	},
+};
+
+const CartVariants: Variants = {
+	hidden: {
+		x: "100%",
+	},
+	visible: {
+		x: 0,
+		transition: {
+			duration: 0.3,
+		},
+	},
+	exit: {
+		x: "100%",
+		transition: {
+			duration: 0.2,
+		},
+	},
+};
 
 function ShoppingCart() {
 	const cartIsOpen = useAppSelector((state) => state.cart.cartIsOpen);
+	const { screenWidth } = useScreenSize();
 
 	return (
-		<Container cartIsOpen={cartIsOpen}>
-			<div />
-			<div>ShoppingCart</div>
-		</Container>
+		<AnimatePresence mode="popLayout">
+			{(cartIsOpen || screenWidth > 900) && (
+				<Container variants={ContainerVariants} initial="hidden" animate="visible" exit="exit">
+					<div />
+					<motion.div variants={CartVariants}>ShoppingCart</motion.div>
+				</Container>
+			)}
+		</AnimatePresence>
 	);
 }
 
 export default ShoppingCart;
 
-interface IContainer {
-	cartIsOpen: boolean;
-}
-
-const Container = styled.div<IContainer>`
+const Container = styled(motion.div)`
 	flex: 0 0 35rem;
 	position: sticky;
 	top: 0;
@@ -33,7 +74,7 @@ const Container = styled.div<IContainer>`
 	}
 
 	@media only screen and (max-width: 900px) {
-		display: ${(props) => (props.cartIsOpen ? "flex" : "none")};
+		display: flex;
 		position: fixed;
 		inset: 0;
 		justify-content: space-between;
