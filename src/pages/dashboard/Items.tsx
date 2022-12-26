@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import Category from "../../components/Category";
-import Item from "../../components/Item";
+import Category from "../../components/items/Category";
+import Item from "../../components/items/Item";
 
 function Items() {
 	return (

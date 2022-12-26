@@ -10,7 +10,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { paths } from "../App";
 import useScreenSize from "../hooks/useScreenSize";
 import { useAppDispatch } from "../store/hooks";
-import { cartActions } from "../store/cartSlice";
+import { cartActions } from "../store/slices/cartSlice";
 
 function SideBar() {
 	const location = useLocation();

@@ -3,8 +3,8 @@ import { useEffect } from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { auth } from "../../api/firebase/index";
-import { authActions } from "../../store/authSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { authActions } from "../../store/slices/authSlice";
 import ShoppingCart from "../ShoppingCart";
 import SideBar from "../SideBar";
 
