@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { auth } from "../../api/firebase/index";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { authActions } from "../../store/slices/authSlice";
-import ShoppingCart from "../ShoppingCart";
+import ShoppingCart from "../cart";
 import SideBar from "../SideBar";
 
 function RequireAuth() {

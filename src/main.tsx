@@ -16,7 +16,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
 			<BrowserRouter>
 				<Provider store={store}>
 					<App />
-					<ReactQueryDevtools position="bottom-right" />
+					{/* <ReactQueryDevtools position="bottom-right" /> */}
 				</Provider>
 			</BrowserRouter>
 		</QueryClientProvider>
