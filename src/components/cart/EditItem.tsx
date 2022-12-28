@@ -21,7 +21,9 @@ function EditItem({ amount, setIsEditing }: Props) {
 				<div className="icon">
 					<AiOutlineMinus />
 				</div>
-				<Amount onClick={() => setIsEditing(false)}>{amount} pcs</Amount>
+				<Amount onClick={() => setIsEditing(false)}>
+					<span>{amount}</span> pcs
+				</Amount>
 				<div className="icon">
 					<AiOutlinePlus />
 				</div>
@@ -46,6 +48,10 @@ const Amount = styled.div`
 	border-radius: 100rem;
 	cursor: pointer;
 	flex-shrink: 0;
+
+	span {
+		font-weight: 700;
+	}
 `;
 
 const Edit = styled.div`
@@ -80,4 +86,5 @@ const Container = styled(motion.div)`
 	right: 0;
 	border-radius: 12px;
 	display: flex;
+	overflow: hidden;
 `;

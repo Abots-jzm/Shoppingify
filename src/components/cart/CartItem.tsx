@@ -15,7 +15,9 @@ function CartItem({ name, amount }: Props) {
 	return (
 		<Container>
 			<Name>{truncateTxt(name, isEditing ? 7 : 17)}</Name>
-			<Amount onClick={() => setIsEditing(true)}>{amount} pcs</Amount>
+			<Amount onClick={() => setIsEditing(true)}>
+				<span>{amount}</span> pcs
+			</Amount>
 			<AnimatePresence>
 				{isEditing && <EditItem key="edit" amount={amount} setIsEditing={setIsEditing} />}
 			</AnimatePresence>
@@ -33,6 +35,10 @@ const Amount = styled.div`
 	border-radius: 100rem;
 	cursor: pointer;
 	flex-shrink: 0;
+
+	span {
+		font-weight: 700;
+	}
 `;
 
 const Name = styled.div`

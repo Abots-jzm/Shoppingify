@@ -5,11 +5,10 @@ import CartCategory from "./CartCategory";
 import CartItem from "./CartItem";
 
 function CartContent() {
-	const { listName, items } = useAppSelector((state) => state.cart);
+	const items = useAppSelector((state) => state.cart.items);
 
 	return (
 		<Container>
-			<Title>{listName}</Title>
 			<Categories>
 				{items.map(({ name, items }, i) => (
 					<CartCategory title={name} key={i}>
@@ -31,16 +30,8 @@ const Categories = styled.div`
 	gap: 5.1rem;
 `;
 
-const Title = styled.div`
-	color: #34333a;
-	font-size: 2.4rem;
-	font-weight: 700;
-	margin-bottom: 3.9rem;
-`;
-
 const Container = styled.div`
 	flex: 1;
-	margin-top: 4.4rem;
 	overflow-y: auto;
 	padding: 0 1.5rem;
 
@@ -57,9 +48,5 @@ const Container = styled.div`
 		height: 1rem;
 		background: #444;
 		border-radius: 100rem;
-	}
-
-	@media only screen and (max-width: 600px) {
-		margin-top: 3.2rem;
 	}
 `;

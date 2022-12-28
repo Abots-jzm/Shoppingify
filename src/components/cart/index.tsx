@@ -7,7 +7,8 @@ import CartController from "./CartController";
 import CartContent from "./CartContent";
 
 function ShoppingCart() {
-	const cartIsEmpty = useAppSelector((state) => state.cart.items).length === 0;
+	const { listName, items } = useAppSelector((state) => state.cart);
+	const cartIsEmpty = items.length === 0;
 
 	return (
 		<CartController>
@@ -22,6 +23,7 @@ function ShoppingCart() {
 							<button>Add item</button>
 						</div>
 					</AddNewItem>
+					<Title>{listName}</Title>
 					{cartIsEmpty && <EmptyCart />}
 					{!cartIsEmpty && <CartContent />}
 				</Padded>
@@ -32,6 +34,19 @@ function ShoppingCart() {
 }
 
 export default ShoppingCart;
+
+const Title = styled.div`
+	color: #34333a;
+	font-size: 2.4rem;
+	font-weight: 700;
+	margin-top: 4.4rem;
+	margin-bottom: 3.9rem;
+	padding: 0 1.5rem;
+
+	@media only screen and (max-width: 600px) {
+		margin-top: 3.2rem;
+	}
+`;
 
 const Padded = styled.div`
 	padding: 4rem 3.5rem;
@@ -49,7 +64,6 @@ const CartBody = styled.div`
 	display: flex;
 	flex-direction: column;
 	height: 100%;
-	/* overflow-y: scroll; */
 `;
 
 const AddNewItem = styled.div`
@@ -60,16 +74,13 @@ const AddNewItem = styled.div`
 	width: 100%;
 	display: flex;
 	padding: 1.7rem 2rem;
+	padding-left: 12rem;
 	gap: 3rem;
 
 	.img {
-		position: relative;
-
-		img {
-			position: relative;
-			transform: scale(1.4);
-			bottom: 1.4rem;
-		}
+		position: absolute;
+		left: 4.5rem;
+		top: 2.2rem;
 	}
 
 	.right {
@@ -85,6 +96,13 @@ const AddNewItem = styled.div`
 			border-radius: 12px;
 			padding: 1.1rem 2.95rem;
 			font-size: 1.4rem;
+		}
+	}
+
+	@media only screen and (max-width: 600px) {
+		.img {
+			left: 3rem;
+			top: 0.7rem;
 		}
 	}
 `;
