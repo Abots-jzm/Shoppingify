@@ -23,7 +23,7 @@ const initialState: InitialState = {
 		{
 			name: "Testing",
 			items: [
-				{ name: "Goodies", amount: 3 },
+				{ name: "Ayooooooo looooooooo", amount: 3 },
 				{ name: "Goodies", amount: 3 },
 			],
 		},

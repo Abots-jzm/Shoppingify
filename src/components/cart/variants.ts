@@ -31,3 +31,38 @@ export const CartVariants: Variants = {
 		},
 	},
 };
+
+export const DeleteBtnVariants: Variants = {
+	hidden: {
+		x: "18.7rem",
+		transition: {
+			duration: 0.4,
+		},
+	},
+	visible: {
+		x: 0,
+		transition: {
+			duration: 0.4,
+		},
+	},
+};
+
+export const RevealVariants: Variants = {
+	hidden: {
+		backgroundImage: "linear-gradient(90deg, #fff0de 0%, #fff0de 100%, transparent 100%)",
+		display: "block",
+		transition: {
+			duration: 0.4,
+		},
+	},
+	visible: {
+		backgroundImage: "linear-gradient(90deg, #fff0de 0%, #fff0de 0%, transparent 0%)",
+		display: "none",
+		transition: {
+			duration: 0.4,
+			display: {
+				delay: 0.4,
+			},
+		},
+	},
+};

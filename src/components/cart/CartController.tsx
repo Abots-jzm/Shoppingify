@@ -23,6 +23,7 @@ function CartController({ children }: Props) {
 		<AnimatePresence initial={false}>
 			{(cartIsOpen || screenWidth > 900) && (
 				<Container
+					key="cart"
 					variants={ContainerVariants}
 					initial="hidden"
 					animate="visible"

@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { auth } from "../../api/firebase/index";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { authActions } from "../../store/slices/authSlice";
+import storage from "../../util/storage";
 import ShoppingCart from "../cart";
 import SideBar from "../SideBar";
 
@@ -17,10 +18,10 @@ function RequireAuth() {
 		onAuthStateChanged(auth, (user) => {
 			if (user) {
 				dispatch(authActions.login(user.uid));
-				localStorage.setItem("uid", JSON.stringify(user.uid));
+				storage.set("uid", user.uid);
 			} else {
 				dispatch(authActions.logout());
-				localStorage.removeItem("uid");
+				storage.remove("uid");
 			}
 		});
 	}, []);

@@ -1,12 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { PayloadAction } from "@reduxjs/toolkit/dist/createAction";
+import storage from "../../util/storage";
 
 type InitialState = {
 	uid: string | null;
 };
 
 const initialState: InitialState = {
-	uid: JSON.parse(localStorage.getItem("uid")!) || null,
+	uid: storage.get("uid"),
 };
 
 const authSlice = createSlice({
