@@ -49,20 +49,15 @@ export const DeleteBtnVariants: Variants = {
 
 export const RevealVariants: Variants = {
 	hidden: {
-		backgroundImage: "linear-gradient(90deg, #fff0de 0%, #fff0de 100%, transparent 100%)",
-		display: "block",
+		width: 0,
 		transition: {
 			duration: 0.4,
 		},
 	},
 	visible: {
-		backgroundImage: "linear-gradient(90deg, #fff0de 0%, #fff0de 0%, transparent 0%)",
-		display: "none",
+		width: "max-content",
 		transition: {
 			duration: 0.4,
-			display: {
-				delay: 0.4,
-			},
 		},
 	},
 };

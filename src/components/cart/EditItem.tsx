@@ -12,8 +12,7 @@ type Props = {
 
 function EditItem({ amount, setIsEditing }: Props) {
 	return (
-		<Container initial="hidden" animate="visible" exit="hidden">
-			<Reveal variants={RevealVariants} />
+		<Container initial="hidden" animate="visible" exit="hidden" variants={RevealVariants}>
 			<Delete variants={DeleteBtnVariants}>
 				<MdOutlineDeleteOutline />
 			</Delete>
@@ -33,12 +32,6 @@ function EditItem({ amount, setIsEditing }: Props) {
 }
 
 export default EditItem;
-
-const Reveal = styled(motion.div)`
-	position: absolute;
-	inset: 0;
-	z-index: 2;
-`;
 
 const Amount = styled.div`
 	border: 2px solid #f9a109;
@@ -62,6 +55,7 @@ const Edit = styled.div`
 	font-size: 2rem;
 	color: #f9a109;
 	align-items: center;
+	flex-shrink: 0;
 
 	.icon {
 		display: grid;
@@ -87,4 +81,5 @@ const Container = styled(motion.div)`
 	border-radius: 12px;
 	display: flex;
 	overflow: hidden;
+	justify-content: flex-end;
 `;
