@@ -44,7 +44,7 @@ function Items() {
 				{typedData.map((category) => (
 					<Category key={category.id} title={category.name}>
 						{category.items.map((item) => (
-							<Item key={item.id}>{item.name}</Item>
+							<Item key={item.id} id={item.id} name={item.name} categoryName={category.name} categoryId={category.id} />
 						))}
 					</Category>
 				))}

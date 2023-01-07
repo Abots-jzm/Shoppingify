@@ -1,14 +1,21 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 import { useAppSelector } from "../../store/hooks";
 import CartCategory from "./CartCategory";
 import CartItem from "./CartItem";
 
 function CartContent() {
+	const containerRef = useRef<HTMLDivElement>(null);
 	const items = useAppSelector((state) => state.cart.items);
 
+	useEffect(() => {
+		if (!containerRef.current) return;
+
+		containerRef.current.scrollTop = containerRef.current.scrollHeight;
+	}, [items]);
+
 	return (
-		<Container>
+		<Container ref={containerRef}>
 			<Categories>
 				{items.map(({ name, items, id }) => (
 					<CartCategory title={name} key={id}>

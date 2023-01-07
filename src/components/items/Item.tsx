@@ -1,16 +1,27 @@
 import React, { ReactNode } from "react";
 import styled from "styled-components";
 import { GoPlus } from "react-icons/go";
+import { useAppDispatch } from "../../store/hooks";
+import { cartActions } from "../../store/slices/cartSlice";
 
 type Props = {
-	children: ReactNode;
+	name: string;
+	id: string;
+	categoryName: string;
+	categoryId: string;
 };
 
-function Item({ children }: Props) {
+function Item({ name, id, categoryName, categoryId }: Props) {
+	const dispatch = useAppDispatch();
+
+	function handleAddToCart() {
+		dispatch(cartActions.addToCart({ categoryId, categoryName, id, name }));
+	}
+
 	return (
 		<Container>
-			<div>{children}</div>
-			<Icon>
+			<div>{name}</div>
+			<Icon onClick={handleAddToCart}>
 				<GoPlus />
 			</Icon>
 		</Container>

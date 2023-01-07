@@ -26,3 +26,10 @@ export type CartInitialState = {
 	listName: string;
 	items: CartCategories[];
 };
+
+export type AddToCartPayload = {
+	name: string;
+	id: string;
+	categoryName: string;
+	categoryId: string;
+};

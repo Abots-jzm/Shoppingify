@@ -1,29 +1,10 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { CartInitialState } from "./types";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AddToCartPayload, CartInitialState } from "./types";
 
 const initialState: CartInitialState = {
 	cartIsOpen: false,
 	listName: "Shopping list",
-	items: [
-		{
-			name: "Testing",
-			id: "t",
-			items: [
-				{ name: "Ayooooooo looooooooo", amount: 3, id: "t-1" },
-				{ name: "Goodies", amount: 3, id: "t-2" },
-			],
-		},
-		{
-			name: "Testing 2",
-			id: "t2",
-			items: [
-				{ name: "Goodies", amount: 3, id: "t2-1" },
-				{ name: "Goodies", amount: 3, id: "t2-2" },
-				{ name: "Goodies", amount: 3, id: "t2-3" },
-				{ name: "Goodies", amount: 3, id: "t2-4" },
-			],
-		},
-	],
+	items: [],
 };
 
 const cartSlice = createSlice({
@@ -32,6 +13,29 @@ const cartSlice = createSlice({
 	reducers: {
 		toggleCart(state) {
 			state.cartIsOpen = !state.cartIsOpen;
+		},
+		addToCart({ items: categories }, { payload }: PayloadAction<AddToCartPayload>) {
+			const categoryOfInterest = categories.find((category) => category.id === payload.categoryId);
+			if (!categoryOfInterest) {
+				categories.push({
+					name: payload.categoryName,
+					id: payload.categoryId,
+					items: [{ name: payload.name, id: payload.id, amount: 1 }],
+				});
+				return;
+			}
+
+			const itemOfInterest = categoryOfInterest.items.find((item) => item.id === payload.id);
+			if (itemOfInterest) {
+				itemOfInterest.amount++;
+				return;
+			}
+
+			categoryOfInterest.items.push({
+				name: payload.name,
+				id: payload.id,
+				amount: 1,
+			});
 		},
 	},
 });
