@@ -24,7 +24,6 @@ const Icon = styled.div`
 	width: 2.1rem;
 	text-align: right;
 	flex-shrink: 0;
-	cursor: pointer;
 `;
 
 const Container = styled.div`
@@ -35,4 +34,5 @@ const Container = styled.div`
 	display: flex;
 	justify-content: space-between;
 	align-items: flex-start;
+	cursor: pointer;
 `;

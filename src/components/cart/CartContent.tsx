@@ -10,10 +10,10 @@ function CartContent() {
 	return (
 		<Container>
 			<Categories>
-				{items.map(({ name, items }, i) => (
-					<CartCategory title={name} key={i}>
-						{items.map(({ name, amount }, j) => (
-							<CartItem name={name} amount={amount} key={j} />
+				{items.map(({ name, items, id }) => (
+					<CartCategory title={name} key={id}>
+						{items.map(({ name, amount, id }) => (
+							<CartItem name={name} amount={amount} key={id} />
 						))}
 					</CartCategory>
 				))}

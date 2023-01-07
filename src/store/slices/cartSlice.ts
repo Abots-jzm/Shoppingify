@@ -1,39 +1,26 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { CartInitialState } from "./types";
 
-type ItemType = {
-	name: string;
-	amount: number;
-};
-
-type Categories = {
-	name: string;
-	items: ItemType[];
-};
-
-type InitialState = {
-	cartIsOpen: boolean;
-	listName: string;
-	items: Categories[];
-};
-
-const initialState: InitialState = {
+const initialState: CartInitialState = {
 	cartIsOpen: false,
 	listName: "Shopping list",
 	items: [
 		{
 			name: "Testing",
+			id: "t",
 			items: [
-				{ name: "Ayooooooo looooooooo", amount: 3 },
-				{ name: "Goodies", amount: 3 },
+				{ name: "Ayooooooo looooooooo", amount: 3, id: "t-1" },
+				{ name: "Goodies", amount: 3, id: "t-2" },
 			],
 		},
 		{
 			name: "Testing 2",
+			id: "t2",
 			items: [
-				{ name: "Goodies", amount: 3 },
-				{ name: "Goodies", amount: 3 },
-				{ name: "Goodies", amount: 3 },
-				{ name: "Goodies", amount: 3 },
+				{ name: "Goodies", amount: 3, id: "t2-1" },
+				{ name: "Goodies", amount: 3, id: "t2-2" },
+				{ name: "Goodies", amount: 3, id: "t2-3" },
+				{ name: "Goodies", amount: 3, id: "t2-4" },
 			],
 		},
 	],

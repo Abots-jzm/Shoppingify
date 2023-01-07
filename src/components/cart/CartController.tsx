@@ -48,7 +48,7 @@ const Container = styled(motion.div)`
 	top: 0;
 	height: 100vh;
 	max-height: 100vh;
-	background-color: rgba(0, 0, 0, 0.5);
+	background-color: #fafafe;
 
 	.empty {
 		display: none;
@@ -70,6 +70,7 @@ const Container = styled(motion.div)`
 		position: fixed;
 		inset: 0;
 		justify-content: space-between;
+		background-color: rgba(0, 0, 0, 0.5);
 
 		.empty {
 			display: block;
