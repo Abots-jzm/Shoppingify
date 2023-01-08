@@ -6,21 +6,21 @@ import CartItem from "./CartItem";
 
 function CartContent() {
 	const containerRef = useRef<HTMLDivElement>(null);
-	const items = useAppSelector((state) => state.cart.items);
+	const { items, itemsCount } = useAppSelector((state) => state.cart);
 
 	useEffect(() => {
 		if (!containerRef.current) return;
 
 		containerRef.current.scrollTop = containerRef.current.scrollHeight;
-	}, [items]);
+	}, [itemsCount]);
 
 	return (
 		<Container ref={containerRef}>
 			<Categories>
-				{items.map(({ name, items, id }) => (
-					<CartCategory title={name} key={id}>
-						{items.map(({ name, amount, id }) => (
-							<CartItem name={name} amount={amount} key={id} />
+				{items.map((category) => (
+					<CartCategory title={category.name} key={category.id}>
+						{category.items.map(({ name, amount, id }) => (
+							<CartItem id={id} categoryId={category.id} name={name} amount={amount} key={id} />
 						))}
 					</CartCategory>
 				))}

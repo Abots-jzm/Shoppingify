@@ -4,26 +4,32 @@ import { MdOutlineDeleteOutline } from "react-icons/md";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { motion } from "framer-motion";
 import { DeleteBtnVariants, RevealVariants } from "./variants";
+import { useAppDispatch } from "../../store/hooks";
+import { cartActions } from "../../store/slices/cartSlice";
 
 type Props = {
 	amount: number;
 	setIsEditing: React.Dispatch<React.SetStateAction<boolean>>;
+	itemId: string;
+	categoryId: string;
 };
 
-function EditItem({ amount, setIsEditing }: Props) {
+function EditItem({ amount, setIsEditing, itemId, categoryId }: Props) {
+	const dispatch = useAppDispatch();
+
 	return (
 		<Container initial="hidden" animate="visible" exit="hidden" variants={RevealVariants}>
-			<Delete variants={DeleteBtnVariants}>
+			<Delete variants={DeleteBtnVariants} onClick={() => dispatch(cartActions.removeFromCart({ itemId, categoryId }))}>
 				<MdOutlineDeleteOutline />
 			</Delete>
 			<Edit>
-				<div className="icon">
+				<div className="icon" onClick={() => dispatch(cartActions.decreaseAmount({ itemId, categoryId }))}>
 					<AiOutlineMinus />
 				</div>
 				<Amount onClick={() => setIsEditing(false)}>
 					<span>{amount}</span> pcs
 				</Amount>
-				<div className="icon">
+				<div className="icon" onClick={() => dispatch(cartActions.increaseAmount({ itemId, categoryId }))}>
 					<AiOutlinePlus />
 				</div>
 			</Edit>

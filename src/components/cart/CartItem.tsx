@@ -1,15 +1,16 @@
-import { AnimatePresence } from "framer-motion";
 import React, { useState } from "react";
+import { AnimatePresence } from "framer-motion";
 import styled from "styled-components";
-import { truncateTxt } from "../../util";
 import EditItem from "./EditItem";
 
 type Props = {
 	name: string;
 	amount: number;
+	id: string;
+	categoryId: string;
 };
 
-function CartItem({ name, amount }: Props) {
+function CartItem({ name, amount, id, categoryId }: Props) {
 	const [isEditing, setIsEditing] = useState(false);
 
 	return (
@@ -19,7 +20,9 @@ function CartItem({ name, amount }: Props) {
 				<span>{amount}</span> pcs
 			</Amount>
 			<AnimatePresence>
-				{isEditing && <EditItem key="edit" amount={amount} setIsEditing={setIsEditing} />}
+				{isEditing && (
+					<EditItem key="edit" amount={amount} setIsEditing={setIsEditing} itemId={id} categoryId={categoryId} />
+				)}
 			</AnimatePresence>
 		</Container>
 	);

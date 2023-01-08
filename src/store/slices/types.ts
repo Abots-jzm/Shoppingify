@@ -25,6 +25,7 @@ export type CartInitialState = {
 	cartIsOpen: boolean;
 	listName: string;
 	items: CartCategories[];
+	itemsCount: number;
 };
 
 export type AddToCartPayload = {
@@ -32,4 +33,9 @@ export type AddToCartPayload = {
 	id: string;
 	categoryName: string;
 	categoryId: string;
+};
+
+export type IncreaseOrDecreasePayload = {
+	categoryId: string;
+	itemId: string;
 };

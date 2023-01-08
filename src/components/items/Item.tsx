@@ -44,6 +44,5 @@ const Container = styled.div`
 	padding: 1.6rem;
 	display: flex;
 	justify-content: space-between;
-	align-items: flex-start;
 	cursor: pointer;
 `;
