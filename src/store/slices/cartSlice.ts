@@ -1,4 +1,4 @@
-import { createSlice, current, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AddToCartPayload, CartInitialState, IncreaseOrDecreasePayload } from "./types";
 
 const initialState: CartInitialState = {
@@ -41,6 +41,7 @@ const cartSlice = createSlice({
 			if (indexOfInterest < 0) return;
 
 			categoryOfInterest.items.splice(indexOfInterest, 1);
+			state.itemsCount--;
 
 			if (categoryOfInterest.items.length === 0) state.items.splice(state.items.indexOf(categoryOfInterest), 1);
 		},

@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 import { useLocation, useNavigate } from "react-router-dom";
 import { paths } from "../App";
 import useScreenSize from "../hooks/useScreenSize";
-import { useAppDispatch } from "../store/hooks";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { cartActions } from "../store/slices/cartSlice";
 
 function SideBar() {
@@ -17,6 +17,7 @@ function SideBar() {
 	const navigate = useNavigate();
 	const { screenWidth } = useScreenSize();
 	const dispatch = useAppDispatch();
+	const itemCount = useAppSelector((state) => state.cart.itemsCount);
 
 	function handleCartBtnClick() {
 		if (screenWidth > 900) return;
@@ -44,6 +45,7 @@ function SideBar() {
 				</div>
 			</Tabs>
 			<CartBtn onClick={handleCartBtnClick}>
+				{itemCount !== 0 && <ItemsCount>{itemCount}</ItemsCount>}
 				<HiOutlineShoppingCart />
 			</CartBtn>
 		</Container>
@@ -63,6 +65,20 @@ const ActiveBar = styled(Bar)`
 	border-radius: 0px 4px 4px 0px;
 `;
 
+const ItemsCount = styled.div`
+	background-color: #eb5757;
+	position: absolute;
+	color: white;
+	border-radius: 4px;
+	display: grid;
+	place-items: center;
+	top: -0.5rem;
+	right: -0.5rem;
+	font-size: 1.2rem;
+	height: 2rem;
+	width: 2rem;
+`;
+
 const CartBtn = styled.div`
 	background-color: #f9a109;
 	color: white;
@@ -73,6 +89,7 @@ const CartBtn = styled.div`
 	border-radius: 50%;
 	font-size: 2.2rem;
 	cursor: pointer;
+	position: relative;
 `;
 
 const Tabs = styled.div`
