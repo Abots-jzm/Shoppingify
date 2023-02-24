@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { AnimatePresence } from "framer-motion";
+import React, { useEffect, useState } from "react";
+import { AnimatePresence, motion, useAnimationControls } from "framer-motion";
 import styled from "styled-components";
 import EditItem from "./EditItem";
 
@@ -12,11 +12,19 @@ type Props = {
 
 function CartItem({ name, amount, id, categoryId }: Props) {
 	const [isEditing, setIsEditing] = useState(false);
+	const amountControls = useAnimationControls();
+
+	useEffect(() => {
+		if (!amount || isEditing) return
+
+		amountControls.start({scaleX: 1.1,  transition: {duration: 0.1,}})
+		.then(() => amountControls.start({scaleX: 1, transition: { duration: 0.1 }}));
+	}, [amount])
 
 	return (
 		<Container>
 			<Name>{name}</Name>
-			<Amount onClick={() => setIsEditing(true)}>
+			<Amount onClick={() => setIsEditing(true)} animate={amountControls}>
 				<span>{amount}</span> pcs
 			</Amount>
 			<AnimatePresence>
@@ -30,7 +38,7 @@ function CartItem({ name, amount, id, categoryId }: Props) {
 
 export default CartItem;
 
-const Amount = styled.div`
+const Amount = styled(motion.div)`
 	border: 2px solid #f9a109;
 	color: #f9a109;
 	font-size: 1.2rem;

@@ -1,11 +1,11 @@
-import React, { MouseEvent } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import logoSVG from "../assets/logo.svg";
 import { FiList } from "react-icons/fi";
 import { TbHistory } from "react-icons/tb";
 import { BiBarChartSquare } from "react-icons/bi";
 import { HiOutlineShoppingCart } from "react-icons/hi";
-import { motion } from "framer-motion";
+import { motion, useAnimationControls } from "framer-motion";
 import { useLocation, useNavigate } from "react-router-dom";
 import { paths } from "../App";
 import useScreenSize from "../hooks/useScreenSize";
@@ -18,12 +18,21 @@ function SideBar() {
 	const { screenWidth } = useScreenSize();
 	const dispatch = useAppDispatch();
 	const itemCount = useAppSelector((state) => state.cart.itemsCount);
+	const CartBtnControls = useAnimationControls();
 
 	function handleCartBtnClick() {
 		if (screenWidth > 900) return;
 
 		dispatch(cartActions.toggleCart());
 	}
+
+	useEffect(() => {
+		if (!itemCount) return
+
+		CartBtnControls.start({scale: 1.2,  transition: {duration: 0.15,}})
+		.then(() => CartBtnControls.start({scale: 1, transition: { duration: 0.15 }}));
+	}, [itemCount])
+	
 
 	return (
 		<Container>
@@ -44,7 +53,7 @@ function SideBar() {
 					<BiBarChartSquare />
 				</div>
 			</Tabs>
-			<CartBtn onClick={handleCartBtnClick}>
+			<CartBtn onClick={handleCartBtnClick} animate={CartBtnControls}>
 				{itemCount !== 0 && <ItemsCount>{itemCount}</ItemsCount>}
 				<HiOutlineShoppingCart />
 			</CartBtn>
@@ -79,7 +88,7 @@ const ItemsCount = styled.div`
 	width: 2rem;
 `;
 
-const CartBtn = styled.div`
+const CartBtn = styled(motion.div)`
 	background-color: #f9a109;
 	color: white;
 	display: grid;

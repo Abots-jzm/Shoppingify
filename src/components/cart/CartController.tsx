@@ -7,10 +7,11 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { cartActions } from "../../store/slices/cartSlice";
 
 type Props = {
+	color: string;
 	children: ReactNode;
 };
 
-function CartController({ children }: Props) {
+function CartController({ color, children }: Props) {
 	const cartIsOpen = useAppSelector((state) => state.cart.cartIsOpen);
 	const dispatch = useAppDispatch();
 	const { screenWidth } = useScreenSize();
@@ -29,6 +30,7 @@ function CartController({ children }: Props) {
 					animate="visible"
 					exit="hidden"
 					onClick={onOverlayClick}
+					color={color}
 				>
 					<div className="empty" />
 					<motion.div variants={CartVariants} className="cart" onClick={(e) => e.stopPropagation()}>
@@ -42,7 +44,11 @@ function CartController({ children }: Props) {
 
 export default CartController;
 
-const Container = styled(motion.div)`
+interface IContainer {
+	color: string;
+}
+
+const Container = styled(motion.div)<IContainer>`
 	flex: 0 0 39rem;
 	position: sticky;
 	top: 0;
@@ -60,7 +66,8 @@ const Container = styled(motion.div)`
 	}
 
 	& > div {
-		background-color: #fff0de;
+		/* background-color: #fff0de; */
+		background-color: ${(props) => props.color};
 		width: 100%;
 		height: 100%;
 	}

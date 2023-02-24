@@ -30,11 +30,12 @@ function Item({ name, id, categoryName, categoryId }: Props) {
 
 export default Item;
 
-const Icon = styled.div`
+const Icon = styled.button`
 	color: #c1c1c4;
 	width: 2.1rem;
 	text-align: right;
 	flex-shrink: 0;
+	background-color: inherit;
 `;
 
 const Container = styled.div`

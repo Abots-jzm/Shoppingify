@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useAppSelector } from "../../store/hooks";
 import sourceSVG from "../../assets/source.svg";
@@ -5,13 +6,24 @@ import EmptyCart from "./EmptyCart";
 import CartBottom from "./CartBottom";
 import CartController from "./CartController";
 import CartContent from "./CartContent";
+import NewItemForm from "./NewItemForm";
 
 function ShoppingCart() {
 	const { listName, items } = useAppSelector((state) => state.cart);
 	const cartIsEmpty = items.length === 0;
+	const [isAddingNewItem, setIsAddingNewItem] = useState(false);
+
+	if (isAddingNewItem)
+		return (
+			<CartController color="#FAFAFE">
+				<CartBody>
+					<NewItemForm />
+				</CartBody>
+			</CartController>
+		);
 
 	return (
-		<CartController>
+		<CartController color="#fff0de">
 			<CartBody>
 				<Padded>
 					<AddNewItem>
@@ -20,7 +32,7 @@ function ShoppingCart() {
 						</div>
 						<div className="right">
 							<div>Didn't find what you need?</div>
-							<button>Add item</button>
+							<button onClick={() => setIsAddingNewItem(true)}>Add item</button>
 						</div>
 					</AddNewItem>
 					<Title>{listName}</Title>

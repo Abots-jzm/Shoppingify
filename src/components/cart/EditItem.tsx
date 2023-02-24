@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
-import { motion } from "framer-motion";
+import { motion, useAnimationControls } from "framer-motion";
 import { DeleteBtnVariants, RevealVariants } from "./variants";
 import { useAppDispatch } from "../../store/hooks";
 import { cartActions } from "../../store/slices/cartSlice";
@@ -16,6 +16,14 @@ type Props = {
 
 function EditItem({ amount, setIsEditing, itemId, categoryId }: Props) {
 	const dispatch = useAppDispatch();
+	const amountControls = useAnimationControls();
+
+	useEffect(() => {
+		if (!amount) return
+
+		amountControls.start({scaleX: 1.1,  transition: {duration: 0.1,}})
+		.then(() => amountControls.start({scaleX: 1, transition: { duration: 0.1 }}));
+	}, [amount])
 
 	return (
 		<Container initial="hidden" animate="visible" exit="hidden" variants={RevealVariants}>
@@ -23,15 +31,15 @@ function EditItem({ amount, setIsEditing, itemId, categoryId }: Props) {
 				<MdOutlineDeleteOutline />
 			</Delete>
 			<Edit>
-				<div className="icon" onClick={() => dispatch(cartActions.decreaseAmount({ itemId, categoryId }))}>
+				<button className="icon" onClick={() => dispatch(cartActions.decreaseAmount({ itemId, categoryId }))}>
 					<AiOutlineMinus />
-				</div>
-				<Amount onClick={() => setIsEditing(false)}>
+				</button>
+				<Amount onClick={() => setIsEditing(false)} animate={amountControls}>
 					<span>{amount}</span> pcs
 				</Amount>
-				<div className="icon" onClick={() => dispatch(cartActions.increaseAmount({ itemId, categoryId }))}>
+				<button className="icon" onClick={() => dispatch(cartActions.increaseAmount({ itemId, categoryId }))}>
 					<AiOutlinePlus />
-				</div>
+				</button>
 			</Edit>
 		</Container>
 	);
@@ -39,7 +47,7 @@ function EditItem({ amount, setIsEditing, itemId, categoryId }: Props) {
 
 export default EditItem;
 
-const Amount = styled.div`
+const Amount = styled(motion.div)`
 	border: 2px solid #f9a109;
 	color: #f9a109;
 	font-size: 1.2rem;
@@ -47,6 +55,7 @@ const Amount = styled.div`
 	border-radius: 100rem;
 	cursor: pointer;
 	flex-shrink: 0;
+	user-select: none;
 
 	span {
 		font-weight: 700;
@@ -63,10 +72,12 @@ const Edit = styled.div`
 	align-items: center;
 	flex-shrink: 0;
 
-	.icon {
+	button.icon {
 		display: grid;
 		place-items: center;
 		cursor: pointer;
+		color: inherit;
+		background-color: inherit;
 	}
 `;
 
