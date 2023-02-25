@@ -18,6 +18,13 @@ function ShoppingCart() {
 			<CartController color="#FAFAFE">
 				<CartBody>
 					<NewItemForm />
+					<CartBottom
+						mode="two buttons"
+						outlineBtnText="cancel"
+						FilledBtnText="Save"
+						color="#FAFAFE"
+						onOutlineBtnClicked={() => setIsAddingNewItem(false)}
+					/>
 				</CartBody>
 			</CartController>
 		);
@@ -108,6 +115,11 @@ const AddNewItem = styled.div`
 			border-radius: 12px;
 			padding: 1.1rem 2.95rem;
 			font-size: 1.4rem;
+			transition: 0.3s;
+
+			&:hover {
+				background-color: #ddd;
+			}
 		}
 	}
 

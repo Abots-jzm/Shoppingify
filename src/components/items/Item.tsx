@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React from "react";
 import styled from "styled-components";
 import { GoPlus } from "react-icons/go";
 import { useAppDispatch } from "../../store/hooks";
