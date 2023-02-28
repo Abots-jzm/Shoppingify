@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 type Props = {
 	mode: "normal" | "two buttons";
@@ -7,6 +7,8 @@ type Props = {
 	outlineBtnText?: string;
 	FilledBtnText?: string;
 	FilledBtnColor?: string;
+	addNewItemLoading?: boolean;
+	addNewItemError?: boolean;
 	onOutlineBtnClicked?: () => void;
 	onFilledBtnClicked?: () => void;
 };
@@ -17,6 +19,8 @@ function CartBottom({
 	outlineBtnText,
 	FilledBtnColor,
 	FilledBtnText,
+	addNewItemLoading,
+	addNewItemError,
 	onOutlineBtnClicked,
 	onFilledBtnClicked,
 }: Props) {
@@ -29,8 +33,10 @@ function CartBottom({
 					</button>
 					<button className="filled" type="submit" onClick={onFilledBtnClicked}>
 						{FilledBtnText}
+						{addNewItemLoading && <Spinner />}
 					</button>
 				</TwoButtonsContainer>
+				{addNewItemError && <ErrorMessage>An unexpected error occured</ErrorMessage>}
 			</Container>
 		);
 
@@ -45,6 +51,28 @@ function CartBottom({
 }
 
 export default CartBottom;
+
+const ErrorMessage = styled.span`
+	color: red;
+	font-size: 1.4rem;
+	margin-top: 1rem;
+	display: grid;
+	place-items: center;
+`;
+
+const spinner = keyframes`
+   100% {
+    transform: rotate(360deg);
+  }
+`;
+
+const Spinner = styled.div`
+	width: 1.5rem;
+	height: 1.5rem;
+	border-radius: 50%;
+	border-left: 2px solid white;
+	animation: ${spinner} 0.7s linear infinite;
+`;
 
 interface ITwoButtons {
 	color?: string;
@@ -68,6 +96,10 @@ const TwoButtonsContainer = styled.div<ITwoButtons>`
 		padding: 2rem 2.4rem;
 		border-radius: 12px;
 		background-color: ${(props) => props.color || "#F9A109"};
+		display: flex;
+		gap: 1rem;
+		align-items: center;
+		justify-content: center;
 	}
 `;
 
@@ -117,7 +149,7 @@ const Normal = styled.div`
 	}
 `;
 
-const Container = styled.form<IContainer>`
+const Container = styled.div<IContainer>`
 	background-color: ${(props) => props.color || "white"};
 	margin-top: auto;
 	padding: 3.5rem 4rem;

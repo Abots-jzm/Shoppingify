@@ -2,6 +2,9 @@ import React, { useRef } from "react";
 import styled from "styled-components";
 import Select from "react-select/creatable";
 import { StylesConfig } from "react-select/dist/declarations/src";
+import { ErrorMessage, Field, useField } from "formik";
+import { SelectOption } from "./types";
+import { useAppSelector } from "../../store/hooks";
 
 function NewItemForm() {
 	const selectStyles: StylesConfig = {
@@ -53,31 +56,39 @@ function NewItemForm() {
 
 	const selectLabelRef = useRef<HTMLLabelElement>(null);
 
-	const selectOptions = [
-		{ value: "Fruit and vegetables", label: "Fruit and vegetables" },
-		{ value: "Meat and Fish", label: "Meat and Fish" },
-		{ value: "Beverages", label: "Beverages" },
-	];
+	const availableCategories = useAppSelector((state) => state.app.availableCategories);
+
+	function getSelectOptions(availableCategories: string[]): SelectOption[] {
+		return availableCategories.map((cateogry) => ({ value: cateogry, label: cateogry }));
+	}
+
+	const [field, _, helpers] = useField({ name: "category" });
 
 	return (
 		<Container>
 			<h5>Add a new item</h5>
 			<FieldsContainer>
 				<div>
-					<FormInput placeholder="Enter a name" id="name" />
+					<ErrorMessage component={FormError} name="name" />
+					<Field as={FormInput} placeholder="Enter a name" id="name" name="name" />
 					<FormLabel htmlFor="name">Name</FormLabel>
 				</div>
 				<div>
-					<FormTextArea placeholder="Enter a note" id="note" />
+					<Field as={FormTextArea} placeholder="Enter a note" id="note" name="note" />
 					<FormLabel htmlFor="note">Note (optional)</FormLabel>
 				</div>
 				<div>
-					<FormInput placeholder="Enter a url" id="image" />
+					<ErrorMessage name="image" component={FormError} />
+					<Field as={FormInput} placeholder="Enter a url" id="image" name="image" />
 					<FormLabel htmlFor="image">Image (optional)</FormLabel>
 				</div>
 				<div>
+					<ErrorMessage name="category" component={FormError} />
 					<Select
-						options={selectOptions}
+						{...field}
+						name="category"
+						options={getSelectOptions(availableCategories)}
+						isLoading={availableCategories.length === 0}
 						placeholder="Enter a category"
 						styles={selectStyles}
 						isClearable
@@ -91,6 +102,7 @@ function NewItemForm() {
 						onBlur={() => {
 							if (selectLabelRef.current) selectLabelRef.current.style.color = "#34333a";
 						}}
+						onChange={(e: SelectOption) => helpers.setValue(e)}
 					/>
 					<FormLabel htmlFor="category" ref={selectLabelRef}>
 						Category
@@ -102,6 +114,11 @@ function NewItemForm() {
 }
 
 export default NewItemForm;
+
+const FormError = styled.span`
+	color: red;
+	font-size: 1.4rem;
+`;
 
 const FormTextArea = styled.textarea`
 	border: 2px solid #bdbdbd;

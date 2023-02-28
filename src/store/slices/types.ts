@@ -39,3 +39,8 @@ export type IncreaseOrDecreasePayload = {
 	categoryId: string;
 	itemId: string;
 };
+
+export type AppInitialState = {
+	availableCategories: string[];
+	addedItemsCount: number;
+};

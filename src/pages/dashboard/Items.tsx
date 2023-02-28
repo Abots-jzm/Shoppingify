@@ -1,12 +1,30 @@
-import React from "react";
+import React, { useMemo } from "react";
 import styled, { keyframes } from "styled-components";
 import Category from "../../components/items/Category";
 import Item from "../../components/items/Item";
 import useGetDefaultItems from "../../hooks/items/useGetDefualtItems";
+import useGetUserItems from "../../hooks/items/useGetUserItems";
 import { Categories } from "../../store/slices/types";
 
 function Items() {
-	const { data, isLoading, isError } = useGetDefaultItems();
+	const { data: defaultItems, isLoading, isError } = useGetDefaultItems();
+	const { data: userItems } = useGetUserItems();
+
+	const typedDefaultItems = defaultItems?.categories as Categories[];
+
+	const data: Categories[] = useMemo(() => {
+		userItems?.forEach((item, i) => {
+			const categoryOfInterest = typedDefaultItems.find((categtory) => categtory.name === item.category);
+			if (categoryOfInterest) categoryOfInterest.items.push({ name: item.name, id: item.id });
+			else
+				typedDefaultItems.push({
+					name: item.category,
+					id: i.toString(),
+					items: [{ name: item.name, id: item.id }],
+				});
+		});
+		return typedDefaultItems;
+	}, [userItems, typedDefaultItems]);
 
 	if (isLoading)
 		return (
@@ -33,15 +51,13 @@ function Items() {
 		);
 	}
 
-	const typedData = data?.categories as Categories[];
-
 	return (
 		<Container>
 			<HeaderText>
 				<span>Shoppingify</span> allows you to take your shopping list wherever you go
 			</HeaderText>
 			<ContentContainer>
-				{typedData.map((category) => (
+				{data.map((category) => (
 					<Category key={category.id} title={category.name}>
 						{category.items.map((item) => (
 							<Item key={item.id} id={item.id} name={item.name} categoryName={category.name} categoryId={category.id} />

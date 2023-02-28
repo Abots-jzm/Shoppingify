@@ -7,24 +7,63 @@ import CartBottom from "./CartBottom";
 import CartController from "./CartController";
 import CartContent from "./CartContent";
 import NewItemForm from "./NewItemForm";
+import { Formik, Form } from "formik";
+import { AddNewItemType } from "./types";
+import { addNewItemsInitialValues, addNewItemValidationSchema } from "./validation";
+import useAddNewItem from "../../hooks/items/useAddNewItem";
 
 function ShoppingCart() {
 	const { listName, items } = useAppSelector((state) => state.cart);
+	const userId = useAppSelector((state) => state.auth.uid);
+	const addedItemsCount = useAppSelector((state) => state.app.addedItemsCount);
 	const cartIsEmpty = items.length === 0;
 	const [isAddingNewItem, setIsAddingNewItem] = useState(false);
+	const { mutate, isLoading, isError } = useAddNewItem();
+
+	function addNewItem(values: AddNewItemType) {
+		if (!userId) return;
+
+		mutate(
+			{
+				userId,
+				data: {
+					id: userId + "-" + addedItemsCount,
+					name: values.name,
+					note: values.note,
+					image: values.image,
+					category: values.category?.label || "Others",
+				},
+			},
+			{
+				onSuccess() {
+					setIsAddingNewItem(false);
+				},
+			}
+		);
+	}
 
 	if (isAddingNewItem)
 		return (
 			<CartController color="#FAFAFE">
 				<CartBody>
-					<NewItemForm />
-					<CartBottom
-						mode="two buttons"
-						outlineBtnText="cancel"
-						FilledBtnText="Save"
-						color="#FAFAFE"
-						onOutlineBtnClicked={() => setIsAddingNewItem(false)}
-					/>
+					<Formik
+						initialValues={addNewItemsInitialValues}
+						onSubmit={addNewItem}
+						validationSchema={addNewItemValidationSchema}
+					>
+						<Form>
+							<NewItemForm />
+							<CartBottom
+								mode="two buttons"
+								outlineBtnText="cancel"
+								FilledBtnText="Save"
+								addNewItemLoading={isLoading}
+								addNewItemError={isError}
+								color="#FAFAFE"
+								onOutlineBtnClicked={() => setIsAddingNewItem(false)}
+							/>
+						</Form>
+					</Formik>
 				</CartBody>
 			</CartController>
 		);
