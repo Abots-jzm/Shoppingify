@@ -27,12 +27,12 @@ function SideBar() {
 	}
 
 	useEffect(() => {
-		if (!itemCount) return
+		if (!itemCount) return;
 
-		CartBtnControls.start({scale: 1.2,  transition: {duration: 0.15,}})
-		.then(() => CartBtnControls.start({scale: 1, transition: { duration: 0.15 }}));
-	}, [itemCount])
-	
+		CartBtnControls.start({ scale: 1.2, transition: { duration: 0.15 } }).then(() =>
+			CartBtnControls.start({ scale: 1, transition: { duration: 0.15 } })
+		);
+	}, [itemCount]);
 
 	return (
 		<Container>
@@ -97,8 +97,11 @@ const CartBtn = styled(motion.div)`
 	height: 4.2rem;
 	border-radius: 50%;
 	font-size: 2.2rem;
-	cursor: pointer;
 	position: relative;
+
+	@media only screen and (max-width: 900px) {
+		cursor: pointer;
+	}
 `;
 
 const Tabs = styled.div`

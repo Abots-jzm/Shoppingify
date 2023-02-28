@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AppInitialState } from "./types";
+import { AppInitialState, ItemDisplayType } from "./types";
 
 const initialState: AppInitialState = {
 	availableCategories: [],
 	addedItemsCount: 0,
+	currentItem: null,
 };
 
 const appSlice = createSlice({
@@ -16,6 +17,9 @@ const appSlice = createSlice({
 		},
 		setAddedItemsCount(state, { payload }: PayloadAction<number>) {
 			state.addedItemsCount = payload;
+		},
+		updateCurrentItem(state, { payload }: PayloadAction<ItemDisplayType>) {
+			state.currentItem = payload;
 		},
 	},
 });

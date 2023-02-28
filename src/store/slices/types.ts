@@ -1,12 +1,21 @@
 type ItemType = {
 	name: string;
 	id: string;
+	image?: string;
+	note?: string;
 };
 
 type CartItemType = {
 	name: string;
 	amount: number;
 	id: string;
+};
+
+export type ItemDisplayType = {
+	name: string;
+	category: string;
+	image?: string;
+	note?: string;
 };
 
 export type Categories = {
@@ -26,6 +35,8 @@ export type CartInitialState = {
 	listName: string;
 	items: CartCategories[];
 	itemsCount: number;
+	isAddingNewItem: boolean;
+	isCheckingItemDetails: boolean;
 };
 
 export type AddToCartPayload = {
@@ -43,4 +54,5 @@ export type IncreaseOrDecreasePayload = {
 export type AppInitialState = {
 	availableCategories: string[];
 	addedItemsCount: number;
+	currentItem: ItemDisplayType | null;
 };

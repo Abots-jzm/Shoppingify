@@ -31,7 +31,7 @@ function CartBottom({
 					<button type="button" onClick={onOutlineBtnClicked}>
 						{outlineBtnText}
 					</button>
-					<button className="filled" type="submit" onClick={onFilledBtnClicked}>
+					<button className="filled" type={onFilledBtnClicked ? "button" : "submit"} onClick={onFilledBtnClicked}>
 						{FilledBtnText}
 						{addNewItemLoading && <Spinner />}
 					</button>

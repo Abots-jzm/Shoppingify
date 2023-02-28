@@ -12,7 +12,7 @@ function EmptyCart() {
 export default EmptyCart;
 
 const Container = styled.div`
-	padding-top: 24vh;
+	padding-top: 20vh;
 `;
 
 const Text = styled.div`

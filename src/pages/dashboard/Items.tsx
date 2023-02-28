@@ -15,12 +15,13 @@ function Items() {
 	const data: Categories[] = useMemo(() => {
 		userItems?.forEach((item, i) => {
 			const categoryOfInterest = typedDefaultItems.find((categtory) => categtory.name === item.category);
-			if (categoryOfInterest) categoryOfInterest.items.push({ name: item.name, id: item.id });
+			if (categoryOfInterest)
+				categoryOfInterest.items.push({ name: item.name, id: item.id, image: item.image, note: item.note });
 			else
 				typedDefaultItems.push({
 					name: item.category,
 					id: i.toString(),
-					items: [{ name: item.name, id: item.id }],
+					items: [{ name: item.name, id: item.id, image: item.image, note: item.note }],
 				});
 		});
 		return typedDefaultItems;
@@ -60,7 +61,15 @@ function Items() {
 				{data.map((category) => (
 					<Category key={category.id} title={category.name}>
 						{category.items.map((item) => (
-							<Item key={item.id} id={item.id} name={item.name} categoryName={category.name} categoryId={category.id} />
+							<Item
+								key={item.id}
+								id={item.id}
+								name={item.name}
+								categoryName={category.name}
+								categoryId={category.id}
+								note={item.note}
+								image={item.image}
+							/>
 						))}
 					</Category>
 				))}

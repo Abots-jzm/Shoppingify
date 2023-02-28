@@ -6,6 +6,8 @@ const initialState: CartInitialState = {
 	listName: "Shopping list",
 	items: [],
 	itemsCount: 0,
+	isAddingNewItem: false,
+	isCheckingItemDetails: false,
 };
 
 const cartSlice = createSlice({
@@ -69,6 +71,12 @@ const cartSlice = createSlice({
 				amount: 1,
 			});
 			state.itemsCount++;
+		},
+		setIsAddingNewItem(state, { payload }: PayloadAction<boolean>) {
+			state.isAddingNewItem = payload;
+		},
+		setIsCheckingItemDetails(state, { payload }: PayloadAction<boolean>) {
+			state.isCheckingItemDetails = payload;
 		},
 	},
 });

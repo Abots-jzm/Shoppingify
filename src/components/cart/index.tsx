@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useAppSelector } from "../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import sourceSVG from "../../assets/source.svg";
 import EmptyCart from "./EmptyCart";
 import CartBottom from "./CartBottom";
@@ -11,14 +11,16 @@ import { Formik, Form } from "formik";
 import { AddNewItemType } from "./types";
 import { addNewItemsInitialValues, addNewItemValidationSchema } from "./validation";
 import useAddNewItem from "../../hooks/items/useAddNewItem";
+import { cartActions } from "../../store/slices/cartSlice";
+import ItemDetails from "./ItemDetails";
 
 function ShoppingCart() {
-	const { listName, items } = useAppSelector((state) => state.cart);
+	const { listName, items, isAddingNewItem, isCheckingItemDetails } = useAppSelector((state) => state.cart);
 	const userId = useAppSelector((state) => state.auth.uid);
 	const addedItemsCount = useAppSelector((state) => state.app.addedItemsCount);
 	const cartIsEmpty = items.length === 0;
-	const [isAddingNewItem, setIsAddingNewItem] = useState(false);
 	const { mutate, isLoading, isError } = useAddNewItem();
+	const dispatch = useAppDispatch();
 
 	function addNewItem(values: AddNewItemType) {
 		if (!userId) return;
@@ -36,11 +38,28 @@ function ShoppingCart() {
 			},
 			{
 				onSuccess() {
-					setIsAddingNewItem(false);
+					dispatch(cartActions.setIsAddingNewItem(false));
 				},
 			}
 		);
 	}
+
+	if (isCheckingItemDetails)
+		return (
+			<CartController color="#FAFAFE">
+				<CartBody>
+					<ItemDetails />
+					<CartBottom
+						mode="two buttons"
+						outlineBtnText="cancel"
+						FilledBtnText="Add to list"
+						color="#FAFAFE"
+						onFilledBtnClicked={() => {}}
+						onOutlineBtnClicked={() => dispatch(cartActions.setIsCheckingItemDetails(false))}
+					/>
+				</CartBody>
+			</CartController>
+		);
 
 	if (isAddingNewItem)
 		return (
@@ -60,7 +79,7 @@ function ShoppingCart() {
 								addNewItemLoading={isLoading}
 								addNewItemError={isError}
 								color="#FAFAFE"
-								onOutlineBtnClicked={() => setIsAddingNewItem(false)}
+								onOutlineBtnClicked={() => dispatch(cartActions.setIsAddingNewItem(false))}
 							/>
 						</Form>
 					</Formik>
@@ -78,7 +97,7 @@ function ShoppingCart() {
 						</div>
 						<div className="right">
 							<div>Didn't find what you need?</div>
-							<button onClick={() => setIsAddingNewItem(true)}>Add item</button>
+							<button onClick={() => dispatch(cartActions.setIsAddingNewItem(true))}>Add item</button>
 						</div>
 					</AddNewItem>
 					<Title>{listName}</Title>
