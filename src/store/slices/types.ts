@@ -9,11 +9,14 @@ type CartItemType = {
 	name: string;
 	amount: number;
 	id: string;
+	completed: boolean;
 };
 
 export type ItemDisplayType = {
 	name: string;
+	id: string;
 	category: string;
+	categoryId: string;
 	image?: string;
 	note?: string;
 };
@@ -37,6 +40,7 @@ export type CartInitialState = {
 	itemsCount: number;
 	isAddingNewItem: boolean;
 	isCheckingItemDetails: boolean;
+	listMode: "active" | "edit";
 };
 
 export type AddToCartPayload = {

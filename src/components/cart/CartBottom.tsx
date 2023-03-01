@@ -1,5 +1,7 @@
-import React from "react";
+import React, { FormEvent, useState } from "react";
 import styled, { keyframes } from "styled-components";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { cartActions } from "../../store/slices/cartSlice";
 
 type Props = {
 	mode: "normal" | "two buttons";
@@ -7,10 +9,11 @@ type Props = {
 	outlineBtnText?: string;
 	FilledBtnText?: string;
 	FilledBtnColor?: string;
-	addNewItemLoading?: boolean;
-	addNewItemError?: boolean;
+	isLoading?: boolean;
+	isError?: boolean;
 	onOutlineBtnClicked?: () => void;
 	onFilledBtnClicked?: () => void;
+	hideFilled?: boolean;
 };
 
 function CartBottom({
@@ -19,11 +22,22 @@ function CartBottom({
 	outlineBtnText,
 	FilledBtnColor,
 	FilledBtnText,
-	addNewItemLoading,
-	addNewItemError,
+	isLoading,
+	isError,
 	onOutlineBtnClicked,
 	onFilledBtnClicked,
+	hideFilled,
 }: Props) {
+	const [enteredListName, setEnteredListName] = useState("");
+	const items = useAppSelector((state) => state.cart.items);
+	const cartIsEmpty = items.length === 0;
+	const dispatch = useAppDispatch();
+
+	function saveListName(e: FormEvent<HTMLFormElement>) {
+		e.preventDefault();
+		dispatch(cartActions.saveList(enteredListName));
+	}
+
 	if (mode === "two buttons")
 		return (
 			<Container color={color}>
@@ -31,20 +45,37 @@ function CartBottom({
 					<button type="button" onClick={onOutlineBtnClicked}>
 						{outlineBtnText}
 					</button>
-					<button className="filled" type={onFilledBtnClicked ? "button" : "submit"} onClick={onFilledBtnClicked}>
-						{FilledBtnText}
-						{addNewItemLoading && <Spinner />}
-					</button>
+					{!hideFilled && (
+						<button
+							className="filled"
+							type={onFilledBtnClicked ? "button" : "submit"}
+							onClick={onFilledBtnClicked}
+							disabled={isLoading}
+						>
+							{FilledBtnText}
+							{isLoading && <Spinner />}
+						</button>
+					)}
 				</TwoButtonsContainer>
-				{addNewItemError && <ErrorMessage>An unexpected error occured</ErrorMessage>}
+				{isError && <ErrorMessage>An unexpected error occured</ErrorMessage>}
 			</Container>
 		);
 
 	return (
 		<Container color={color}>
-			<Normal>
-				<input type="text" name="name" id="name" placeholder="Enter a name" required />
-				<button type="submit">Save</button>
+			<Normal onSubmit={saveListName}>
+				<input
+					type="text"
+					name="name"
+					id="name"
+					placeholder="Enter a name"
+					required
+					disabled={cartIsEmpty}
+					onChange={(e) => setEnteredListName(e.target.value)}
+				/>
+				<button type="submit" disabled={cartIsEmpty}>
+					Save
+				</button>
 			</Normal>
 		</Container>
 	);
@@ -53,7 +84,7 @@ function CartBottom({
 export default CartBottom;
 
 const ErrorMessage = styled.span`
-	color: red;
+	color: #eb5757;
 	font-size: 1.4rem;
 	margin-top: 1rem;
 	display: grid;
@@ -107,7 +138,7 @@ interface IContainer {
 	color?: string;
 }
 
-const Normal = styled.div`
+const Normal = styled.form`
 	input {
 		border: 2px solid #f9a109;
 		border-radius: 12px;
@@ -123,6 +154,10 @@ const Normal = styled.div`
 		&::placeholder {
 			color: #bdbdbd;
 		}
+
+		&:disabled {
+			border: 2px solid #c1c1c4;
+		}
 	}
 
 	button {
@@ -134,6 +169,11 @@ const Normal = styled.div`
 		background-color: #f9a109;
 		color: white;
 		padding: 0 2.5rem;
+
+		&:disabled {
+			background-color: #c1c1c4;
+			cursor: not-allowed;
+		}
 	}
 
 	@media only screen and (max-width: 600px) {

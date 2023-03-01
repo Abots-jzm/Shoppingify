@@ -53,7 +53,6 @@ const OtherDetails = styled.div`
 `;
 
 const ImageContainer = styled.div`
-	background-color: red;
 	overflow: hidden;
 	border-radius: 25px;
 	margin-bottom: 4.5rem;

@@ -43,14 +43,17 @@ function SideBar() {
 				<div onClick={() => navigate(paths.ITEMS)}>
 					{location.pathname === paths.ITEMS ? <ActiveBar layoutId="active" /> : <Bar />}
 					<FiList />
+					<ToolTip className="tooltip">items</ToolTip>
 				</div>
 				<div onClick={() => navigate(paths.HISTORY)}>
 					{location.pathname === paths.HISTORY ? <ActiveBar layoutId="active" /> : <Bar />}
 					<TbHistory />
+					<ToolTip className="tooltip">history</ToolTip>
 				</div>
 				<div onClick={() => navigate(paths.STATISTICS)}>
 					{location.pathname === paths.STATISTICS ? <ActiveBar layoutId="active" /> : <Bar />}
 					<BiBarChartSquare />
+					<ToolTip className="tooltip">statistics</ToolTip>
 				</div>
 			</Tabs>
 			<CartBtn onClick={handleCartBtnClick} animate={CartBtnControls}>
@@ -62,6 +65,31 @@ function SideBar() {
 }
 
 export default SideBar;
+
+const ToolTip = styled.div`
+	visibility: hidden;
+	font-size: 1.2rem;
+	background-color: #454545;
+	color: white;
+	text-align: center;
+	border-radius: 4px;
+	padding: 0.3rem 1.6rem;
+	position: absolute;
+	z-index: 1;
+	top: 25%;
+	left: 90%;
+
+	&::after {
+		content: "";
+		position: absolute;
+		top: 50%;
+		right: 100%;
+		margin-top: -5px;
+		border-width: 5px;
+		border-style: solid;
+		border-color: transparent #454545 transparent transparent;
+	}
+`;
 
 const Bar = styled(motion.div)`
 	background-color: transparent;
@@ -120,6 +148,11 @@ const Tabs = styled.div`
 		align-items: center;
 		gap: 2.7rem;
 		cursor: pointer;
+		position: relative;
+
+		&:hover .tooltip {
+			visibility: visible;
+		}
 
 		@media only screen and (max-width: 600px) {
 			gap: 1.5rem;

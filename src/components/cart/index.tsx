@@ -13,19 +13,28 @@ import { addNewItemsInitialValues, addNewItemValidationSchema } from "./validati
 import useAddNewItem from "../../hooks/items/useAddNewItem";
 import { cartActions } from "../../store/slices/cartSlice";
 import ItemDetails from "./ItemDetails";
+import { MdEdit } from "react-icons/md";
+import useSaveList from "../../hooks/items/useSaveList";
+import { Timestamp } from "firebase/firestore";
+import Modal from "../Modal";
+import { AnimatePresence } from "framer-motion";
 
 function ShoppingCart() {
-	const { listName, items, isAddingNewItem, isCheckingItemDetails } = useAppSelector((state) => state.cart);
+	const { listName, items, isAddingNewItem, isCheckingItemDetails, listMode } = useAppSelector((state) => state.cart);
+	const { addedItemsCount, currentItem } = useAppSelector((state) => state.app);
 	const userId = useAppSelector((state) => state.auth.uid);
-	const addedItemsCount = useAppSelector((state) => state.app.addedItemsCount);
 	const cartIsEmpty = items.length === 0;
-	const { mutate, isLoading, isError } = useAddNewItem();
 	const dispatch = useAppDispatch();
+
+	const { mutate: addItem, isLoading: addNewItemIsLoading, isError: addNewItemError } = useAddNewItem();
+	const { mutate: saveList, isLoading: IsSavingList, isError: saveListError } = useSaveList();
+
+	const [modalIsOpen, setModalIsOpen] = useState(false);
 
 	function addNewItem(values: AddNewItemType) {
 		if (!userId) return;
 
-		mutate(
+		addItem(
 			{
 				userId,
 				data: {
@@ -44,6 +53,51 @@ function ShoppingCart() {
 		);
 	}
 
+	function addToList() {
+		if (!currentItem) return;
+
+		const { name, category, categoryId, id } = currentItem;
+		dispatch(cartActions.addToCart({ categoryId, id, name, categoryName: category }));
+		dispatch(cartActions.setIsCheckingItemDetails(false));
+	}
+
+	function closeModal() {
+		setModalIsOpen(false);
+	}
+
+	function completeList() {
+		if (!userId) return;
+
+		saveList(
+			{
+				userId,
+				data: { date: Timestamp.fromDate(new Date()), name: listName, state: "completed", list: items },
+			},
+			{
+				onSuccess() {
+					dispatch(cartActions.clearList());
+				},
+			}
+		);
+	}
+
+	function cancelList() {
+		if (!userId) return;
+
+		saveList(
+			{
+				userId,
+				data: { date: Timestamp.fromDate(new Date()), name: listName, state: "cancelled", list: items },
+			},
+			{
+				onSuccess() {
+					dispatch(cartActions.clearList());
+					closeModal();
+				},
+			}
+		);
+	}
+
 	if (isCheckingItemDetails)
 		return (
 			<CartController color="#FAFAFE">
@@ -54,8 +108,9 @@ function ShoppingCart() {
 						outlineBtnText="cancel"
 						FilledBtnText="Add to list"
 						color="#FAFAFE"
-						onFilledBtnClicked={() => {}}
+						onFilledBtnClicked={addToList}
 						onOutlineBtnClicked={() => dispatch(cartActions.setIsCheckingItemDetails(false))}
+						hideFilled={listMode === "active"}
 					/>
 				</CartBody>
 			</CartController>
@@ -76,8 +131,8 @@ function ShoppingCart() {
 								mode="two buttons"
 								outlineBtnText="cancel"
 								FilledBtnText="Save"
-								addNewItemLoading={isLoading}
-								addNewItemError={isError}
+								isLoading={addNewItemIsLoading}
+								isError={addNewItemError}
 								color="#FAFAFE"
 								onOutlineBtnClicked={() => dispatch(cartActions.setIsAddingNewItem(false))}
 							/>
@@ -100,12 +155,39 @@ function ShoppingCart() {
 							<button onClick={() => dispatch(cartActions.setIsAddingNewItem(true))}>Add item</button>
 						</div>
 					</AddNewItem>
-					<Title>{listName}</Title>
+					<Title>
+						<div>{listName}</div>
+						{listMode === "active" && (
+							<button className="edit" onClick={() => dispatch(cartActions.setListMode("edit"))}>
+								<MdEdit />
+							</button>
+						)}
+					</Title>
 					{cartIsEmpty && <EmptyCart />}
 					{!cartIsEmpty && <CartContent />}
 				</Padded>
-				<CartBottom mode={"normal"} />
+				{listMode === "edit" && <CartBottom mode={"normal"} />}
+				{listMode === "active" && (
+					<CartBottom
+						mode="two buttons"
+						outlineBtnText="cancel"
+						FilledBtnText="Complete"
+						FilledBtnColor="#56CCF2"
+						isLoading={IsSavingList && !modalIsOpen}
+						isError={saveListError}
+						color="white"
+						onOutlineBtnClicked={() => setModalIsOpen(true)}
+						onFilledBtnClicked={completeList}
+					/>
+				)}
 			</CartBody>
+			<AnimatePresence>
+				{modalIsOpen && (
+					<Modal closeModal={closeModal} onFilledButtonClicked={cancelList} isLoading={IsSavingList}>
+						Are you sure you want to cancel this list?
+					</Modal>
+				)}
+			</AnimatePresence>
 		</CartController>
 	);
 }
@@ -119,6 +201,15 @@ const Title = styled.div`
 	margin-top: 4.4rem;
 	margin-bottom: 3.9rem;
 	padding: 0 1.5rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+
+	.edit {
+		cursor: pointer;
+		background-color: inherit;
+		color: inherit;
+	}
 
 	@media only screen and (max-width: 600px) {
 		margin-top: 3.2rem;

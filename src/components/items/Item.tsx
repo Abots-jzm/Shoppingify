@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { GoPlus } from "react-icons/go";
-import { useAppDispatch } from "../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { cartActions } from "../../store/slices/cartSlice";
 import { appActions } from "../../store/slices/appSlice";
 
@@ -16,8 +16,11 @@ type Props = {
 
 function Item({ name, id, categoryName, categoryId, image, note }: Props) {
 	const dispatch = useAppDispatch();
+	const listMode = useAppSelector((state) => state.cart.listMode);
 
 	function handleAddToCart(e: React.MouseEvent) {
+		if (listMode === "active") return;
+
 		e.stopPropagation();
 		dispatch(cartActions.addToCart({ categoryId, categoryName, id, name }));
 		dispatch(cartActions.setIsAddingNewItem(false));
@@ -27,7 +30,7 @@ function Item({ name, id, categoryName, categoryId, image, note }: Props) {
 	function showItemDetails() {
 		dispatch(cartActions.setIsCheckingItemDetails(true));
 		dispatch(cartActions.toggleCart());
-		dispatch(appActions.updateCurrentItem({ name, image, note, category: categoryName }));
+		dispatch(appActions.updateCurrentItem({ name, image, note, id, categoryId, category: categoryName }));
 	}
 
 	return (

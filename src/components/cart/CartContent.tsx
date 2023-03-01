@@ -19,8 +19,8 @@ function CartContent() {
 			<Categories>
 				{items.map((category) => (
 					<CartCategory title={category.name} key={category.id}>
-						{category.items.map(({ name, amount, id }) => (
-							<CartItem id={id} categoryId={category.id} name={name} amount={amount} key={id} />
+						{category.items.map(({ name, amount, id, completed }) => (
+							<CartItem id={id} categoryId={category.id} name={name} amount={amount} key={id} completed={completed} />
 						))}
 					</CartCategory>
 				))}

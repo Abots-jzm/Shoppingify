@@ -116,7 +116,7 @@ function NewItemForm() {
 export default NewItemForm;
 
 const FormError = styled.span`
-	color: red;
+	color: #eb5757;
 	font-size: 1.4rem;
 `;
 
