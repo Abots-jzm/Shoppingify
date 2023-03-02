@@ -5,6 +5,17 @@ export type GroupedHistory = {
 	items: HistoryType[];
 };
 
+export type SortedItem = {
+	name: string;
+	percent: number;
+};
+
+export type GroupedMonths = {
+	monthName: string;
+	monthIndex: number;
+	items: number;
+};
+
 export const MONTH_NAMES = [
 	"January",
 	"February",

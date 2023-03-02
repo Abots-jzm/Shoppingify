@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import HistoryDetail from "../../components/history/HistoryDetail";
 import HistoryItem from "../../components/history/ListHistory";
 import { HistoryType } from "../../hooks/items/types";
 import useGetHistory from "../../hooks/items/useGetHistory";
-import { CartCategories } from "../../store/slices/types";
 import { GroupedHistory, MONTH_NAMES } from "./types";
 
 function History() {
@@ -12,7 +11,7 @@ function History() {
 	const [detailsShown, setDetailsShown] = useState(false);
 	const [currentList, setCurrentList] = useState<HistoryType>();
 
-	function groupListsByMonth(): GroupedHistory[] | null {
+	const groupedData = useMemo(() => {
 		if (!data) return null;
 
 		const result: GroupedHistory[] = [];
@@ -31,7 +30,7 @@ function History() {
 		});
 
 		return result;
-	}
+	}, [data]);
 
 	function showDetails(currentList: HistoryType) {
 		setCurrentList(currentList);
@@ -41,8 +40,6 @@ function History() {
 	function hideDetails() {
 		setDetailsShown(false);
 	}
-
-	const groupedData = groupListsByMonth();
 
 	if (detailsShown)
 		return (
