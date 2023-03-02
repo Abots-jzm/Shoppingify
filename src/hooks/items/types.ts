@@ -3,6 +3,7 @@ import { CartCategories } from "./../../store/slices/types";
 export enum itemsQueryKeys {
 	DEFAULT = "default items",
 	ADDED_ITEMS = "added items",
+	HISTORY = "history,",
 }
 
 export type AddedItemType = {
@@ -20,14 +21,17 @@ export type AddNewItemPayload = {
 
 export type UserDocument = {
 	addedItems: AddedItemType[];
+	history: HistoryType[];
+};
+
+export type HistoryType = {
+	state: "completed" | "cancelled";
+	date: Timestamp;
+	name: string;
+	list: CartCategories[];
 };
 
 export type SaveListPayload = {
 	userId: string;
-	data: {
-		state: "completed" | "cancelled";
-		date: Timestamp;
-		name: string;
-		list: CartCategories[];
-	};
+	data: HistoryType;
 };

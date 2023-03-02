@@ -8,11 +8,11 @@ async function saveList(payload: SaveListPayload) {
 }
 
 function useSaveList() {
-	// const queryClient = useQueryClient();
+	const queryClient = useQueryClient();
 
 	return useMutation(saveList, {
 		onSuccess() {
-			// queryClient.invalidateQueries([itemsQueryKeys.ADDED_ITEMS]);
+			queryClient.invalidateQueries([itemsQueryKeys.HISTORY]);
 		},
 	});
 }
