@@ -5,6 +5,7 @@ import { CartVariants, ContainerVariants } from "./variants";
 import useScreenSize from "../../hooks/useScreenSize";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { cartActions } from "../../store/slices/cartSlice";
+import Div100vh from "react-div-100vh";
 
 type Props = {
 	color: string;
@@ -23,20 +24,22 @@ function CartController({ color, children }: Props) {
 	return (
 		<AnimatePresence initial={false}>
 			{(cartIsOpen || screenWidth > 900) && (
-				<Container
-					key="cart"
-					variants={ContainerVariants}
-					initial="hidden"
-					animate="visible"
-					exit="hidden"
-					onClick={onOverlayClick}
-					color={color}
-				>
-					<div className="empty" />
-					<motion.div variants={CartVariants} className="cart" onClick={(e) => e.stopPropagation()}>
-						{children}
-					</motion.div>
-				</Container>
+				<Div100vh>
+					<Container
+						key="cart"
+						variants={ContainerVariants}
+						initial="hidden"
+						animate="visible"
+						exit="hidden"
+						onClick={onOverlayClick}
+						color={color}
+					>
+						<div className="empty" />
+						<motion.div variants={CartVariants} className="cart" onClick={(e) => e.stopPropagation()}>
+							{children}
+						</motion.div>
+					</Container>
+				</Div100vh>
 			)}
 		</AnimatePresence>
 	);
@@ -52,8 +55,7 @@ const Container = styled(motion.div)<IContainer>`
 	flex: 0 0 39rem;
 	position: sticky;
 	top: 0;
-	height: 100vh;
-	max-height: 100vh;
+	height: 100%;
 	background-color: #fafafe;
 
 	.empty {
@@ -62,7 +64,6 @@ const Container = styled(motion.div)<IContainer>`
 
 	.cart {
 		overflow-y: auto;
-		max-height: 100vh;
 	}
 
 	& > div {

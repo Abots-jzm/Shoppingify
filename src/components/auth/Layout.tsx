@@ -238,13 +238,17 @@ const Container = styled.div`
 
 	& > div {
 		padding: 4.8rem 5.8rem;
-		/* border: 1px solid #bdbdbd; */
 		box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.1);
 		border-radius: 1.2rem;
 		width: min(47.3rem, 100%);
+	}
 
-		@media only screen and (max-width: 473px) {
-			/* border: none; */
+	@media only screen and (max-width: 473px) {
+		place-items: start;
+		margin-top: 5vh;
+		height: auto;
+
+		& > div {
 			box-shadow: none;
 			padding: 2rem;
 		}

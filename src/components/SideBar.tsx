@@ -11,6 +11,7 @@ import { paths } from "../App";
 import useScreenSize from "../hooks/useScreenSize";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { cartActions } from "../store/slices/cartSlice";
+import Div100vh from "react-div-100vh";
 
 function SideBar() {
 	const location = useLocation();
@@ -23,6 +24,8 @@ function SideBar() {
 	function handleCartBtnClick() {
 		if (screenWidth > 900) return;
 
+		dispatch(cartActions.setIsAddingNewItem(false));
+		dispatch(cartActions.setIsCheckingItemDetails(false));
 		dispatch(cartActions.toggleCart());
 	}
 
@@ -160,9 +163,8 @@ const Tabs = styled.div`
 	}
 `;
 
-const Container = styled.div`
+const Container = styled(Div100vh)`
 	flex-basis: 9.3rem;
-	height: 100vh;
 	position: sticky;
 	top: 0;
 	z-index: 2;
