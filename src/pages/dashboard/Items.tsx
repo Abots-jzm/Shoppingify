@@ -2,13 +2,16 @@ import React, { useMemo } from "react";
 import styled, { keyframes } from "styled-components";
 import Category from "../../components/items/Category";
 import Item from "../../components/items/Item";
+import MobileCategory from "../../components/items/MobileCategory";
 import useGetDefaultItems from "../../hooks/items/useGetDefualtItems";
 import useGetUserItems from "../../hooks/items/useGetUserItems";
+import useScreenSize from "../../hooks/useScreenSize";
 import { Categories } from "../../store/slices/types";
 
 function Items() {
 	const { data: defaultItems, isLoading, isError } = useGetDefaultItems();
 	const { data: userItems } = useGetUserItems();
+	const { screenWidth } = useScreenSize();
 
 	const typedDefaultItems = defaultItems?.categories as Categories[];
 
@@ -58,21 +61,37 @@ function Items() {
 				<span>Shoppingify</span> allows you to take your shopping list wherever you go
 			</HeaderText>
 			<ContentContainer>
-				{data.map((category) => (
-					<Category key={category.id} title={category.name}>
-						{category.items.map((item) => (
-							<Item
-								key={item.id}
-								id={item.id}
-								name={item.name}
-								categoryName={category.name}
-								categoryId={category.id}
-								note={item.note}
-								image={item.image}
-							/>
-						))}
-					</Category>
-				))}
+				{data.map((category) =>
+					screenWidth > 600 ? (
+						<Category key={category.id} title={category.name}>
+							{category.items.map((item) => (
+								<Item
+									key={item.id}
+									id={item.id}
+									name={item.name}
+									categoryName={category.name}
+									categoryId={category.id}
+									note={item.note}
+									image={item.image}
+								/>
+							))}
+						</Category>
+					) : (
+						<MobileCategory key={category.id} title={category.name}>
+							{category.items.map((item) => (
+								<Item
+									key={item.id}
+									id={item.id}
+									name={item.name}
+									categoryName={category.name}
+									categoryId={category.id}
+									note={item.note}
+									image={item.image}
+								/>
+							))}
+						</MobileCategory>
+					)
+				)}
 			</ContentContainer>
 		</Container>
 	);

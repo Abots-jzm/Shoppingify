@@ -23,3 +23,8 @@ export const ContainerVariants: Variants = {
 		y: 0,
 	},
 };
+
+export const AccordionVariants: Variants = {
+	open: { opacity: 1, height: "auto" },
+	collapsed: { opacity: 0, height: 0 },
+};
