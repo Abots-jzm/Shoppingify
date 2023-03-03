@@ -24,7 +24,7 @@ function CartController({ color, children }: Props) {
 	return (
 		<AnimatePresence initial={false}>
 			{(cartIsOpen || screenWidth > 900) && (
-				<Div100vh>
+				<OuterContainer>
 					<Container
 						key="cart"
 						variants={ContainerVariants}
@@ -39,7 +39,7 @@ function CartController({ color, children }: Props) {
 							{children}
 						</motion.div>
 					</Container>
-				</Div100vh>
+				</OuterContainer>
 			)}
 		</AnimatePresence>
 	);
@@ -47,12 +47,15 @@ function CartController({ color, children }: Props) {
 
 export default CartController;
 
+const OuterContainer = styled(Div100vh)`
+	flex: 0 0 39rem;
+`;
+
 interface IContainer {
 	color: string;
 }
 
 const Container = styled(motion.div)<IContainer>`
-	flex: 0 0 39rem;
 	position: sticky;
 	top: 0;
 	height: 100%;
