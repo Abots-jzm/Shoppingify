@@ -49,6 +49,10 @@ export default CartController;
 
 const OuterContainer = styled(Div100vh)`
 	flex: 0 0 39rem;
+
+	@media only screen and (max-width: 900px) {
+		position: fixed;
+	}
 `;
 
 interface IContainer {

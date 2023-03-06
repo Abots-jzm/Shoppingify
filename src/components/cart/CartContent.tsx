@@ -53,7 +53,7 @@ const Container = styled.div`
 
 	&::-webkit-scrollbar-thumb {
 		height: 1rem;
-		background: #444;
+		background: rgba(0, 0, 0, 0.6);
 		border-radius: 100rem;
 	}
 `;
